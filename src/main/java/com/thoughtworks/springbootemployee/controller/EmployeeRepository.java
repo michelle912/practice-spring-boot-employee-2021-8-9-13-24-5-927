@@ -30,8 +30,8 @@ public class EmployeeRepository {
         return employeeList.stream().filter(employee -> employee.getId().equals(id)).findFirst().orElse(null);
     }
 
-    public Employee findByGender(String gender) {
-        return employeeList.stream().filter(employee -> employee.getGender().equals(gender)).findFirst().orElse(null);
+    public List<Employee> findByGender(String gender) {
+        return employeeList.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList());
     }
 
     public List<Employee> findByPage(Integer page, Integer pageSize) {
