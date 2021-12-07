@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee.controller;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class CompanyRepository {
@@ -31,5 +32,12 @@ public class CompanyRepository {
         return Optional.ofNullable(findById(id))
                 .map(Company::getEmployees)
                 .orElse(Collections.emptyList());
+    }
+
+    public List<Company> findByPage(Integer page, Integer pageSize) {
+        return companyList.stream()
+                .skip((long) page*pageSize)
+                .limit(pageSize)
+                .collect(Collectors.toList());
     }
 }
