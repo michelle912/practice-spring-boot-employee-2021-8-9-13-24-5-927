@@ -59,4 +59,10 @@ public class EmployeeController {
         }
         return employeeRepository.save(existingReord);
     }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<String> deleteEmployeeById(@PathVariable Integer id) {
+        employeeRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }

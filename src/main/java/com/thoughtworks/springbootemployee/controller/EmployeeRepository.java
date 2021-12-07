@@ -57,4 +57,10 @@ public class EmployeeRepository {
         return employee;
     }
 
+    public void deleteById(Integer id) {
+        Employee existingRecord = findById(id);
+
+        employeeList.remove(existingRecord);
+    }
+
 }
