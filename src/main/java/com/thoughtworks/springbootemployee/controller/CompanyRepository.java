@@ -51,4 +51,20 @@ public class CompanyRepository {
 
         return company;
     }
+
+    public Company save(Company company) {
+        Company existingRecord = findById(company.getId());
+
+        companyList.remove(existingRecord);
+        companyList.add(company);
+        return company;
+    }
+
+    public void deleteById(Integer id) {
+        Company existingRecord = findById(id);
+
+        companyList.remove(existingRecord);
+    }
+
+
 }

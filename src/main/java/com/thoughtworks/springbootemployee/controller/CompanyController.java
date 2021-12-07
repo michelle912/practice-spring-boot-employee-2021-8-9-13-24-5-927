@@ -37,4 +37,20 @@ public class CompanyController {
         Company createdCompany = companyRepository.create(company);
         return ResponseEntity.status(201).body(createdCompany);
     }
+
+    @PutMapping(value="/{id}")
+    public Company updateCompany(@PathVariable Integer id, @RequestBody Company company) {
+        Company existingReord = companyRepository.findById(id);
+
+        if(company.getCompanyName() != null) {
+            existingReord.setCompanyName(company.getCompanyName());
+        }
+        return companyRepository.save(existingReord);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<String> deleteCompanyById(@PathVariable Integer id) {
+        companyRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
