@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,4 +32,11 @@ public class EmployeeController {
     public List<Employee> getEmployeeByPage(Integer page, Integer pageSize) {
         return employeeRepository.findByPage(page, pageSize);
     }
+
+    @PostMapping()
+    public ResponseEntity<Employee> createEmployee(@RequestParam Employee employee) {
+        Employee createdEmployee = employeeRepository.create(employee);
+        return ResponseEntity.status(201).body(createdEmployee);
+    }
+    
 }

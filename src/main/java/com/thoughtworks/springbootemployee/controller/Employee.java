@@ -34,4 +34,8 @@ public class Employee {
     public Integer getSalary() {
         return salary;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

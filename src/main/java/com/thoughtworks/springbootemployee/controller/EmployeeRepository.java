@@ -38,5 +38,15 @@ public class EmployeeRepository {
         return employeeList.stream().skip((long) page*pageSize).limit(pageSize).collect(Collectors.toList());
     }
 
+    public Employee create(Employee employee) {
+        Integer nextId = employeeList.stream()
+                .mapToInt(Employee::getId)
+                .max()
+                .orElse(0)+1;
+        employee.setId(nextId);
+        employeeList.add(employee);
+
+        return employee;
+    }
 
 }
