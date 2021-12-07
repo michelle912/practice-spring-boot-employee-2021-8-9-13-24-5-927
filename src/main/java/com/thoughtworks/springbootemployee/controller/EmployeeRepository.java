@@ -49,4 +49,12 @@ public class EmployeeRepository {
         return employee;
     }
 
+    public Employee save(Employee employee) {
+        Employee existingRecord = findById(employee.getId());
+
+        employeeList.remove(existingRecord);
+        employeeList.add(employee);
+        return employee;
+    }
+
 }
