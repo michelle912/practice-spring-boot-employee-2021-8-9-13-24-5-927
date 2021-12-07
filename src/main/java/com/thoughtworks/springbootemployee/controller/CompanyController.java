@@ -1,10 +1,8 @@
 package com.thoughtworks.springbootemployee.controller;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +30,11 @@ public class CompanyController {
     @GetMapping(params = {"page", "pageSize"})
     public List<Company> getCompanyByPage(Integer page, Integer pageSize) {
         return companyRepository.findByPage(page, pageSize);
+    }
+
+    @PostMapping()
+    public ResponseEntity<Company> createCompany(@RequestBody Company company) {
+        Company createdCompany = companyRepository.create(company);
+        return ResponseEntity.status(201).body(createdCompany);
     }
 }
