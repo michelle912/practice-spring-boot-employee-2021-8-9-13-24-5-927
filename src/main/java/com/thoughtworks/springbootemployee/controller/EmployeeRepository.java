@@ -18,7 +18,7 @@ public class EmployeeRepository {
         employeeList.add(new Employee(3,"Lily3", 20, "Female", 8000));
         employeeList.add(new Employee(4,"Lily4", 20, "Female", 8000));
         employeeList.add(new Employee(5,"Lily5", 20, "Female", 8000));
-
+        employeeList.add(new Employee(6,"Tom", 20, "male", 8000));
 
     }
 

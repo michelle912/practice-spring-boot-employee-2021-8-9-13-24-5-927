@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.controller;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,9 +11,10 @@ import java.util.List;
 @RequestMapping("/companies")
 public class CompanyController {
 
+    @Autowired
     private CompanyRepository companyRepository;
 
-    @GetMapping
+    @GetMapping()
     public List<Company> getAllCompanies() {
         return companyRepository.findAll();
     }
