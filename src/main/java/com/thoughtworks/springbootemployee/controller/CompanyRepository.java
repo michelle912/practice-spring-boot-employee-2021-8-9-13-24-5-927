@@ -2,10 +2,7 @@ package com.thoughtworks.springbootemployee.controller;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class CompanyRepository {
@@ -28,5 +25,11 @@ public class CompanyRepository {
                 .filter(company -> company.getId().equals(id))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public List<Employee> findEmployeeListById(Integer id) {
+        return Optional.ofNullable(findById(id))
+                .map(Company::getEmployees)
+                .orElse(Collections.emptyList());
     }
 }
