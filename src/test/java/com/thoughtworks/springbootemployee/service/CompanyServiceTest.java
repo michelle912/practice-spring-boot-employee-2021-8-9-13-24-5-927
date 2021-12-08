@@ -122,7 +122,7 @@ public class CompanyServiceTest {
         // then
         assertAll(
                 () -> assertEquals(1, actual.size()),
-                () -> assertEquals(companyList.get(0), actual.get(0))
+                () -> assertEquals(company3, actual.get(0))
         );
     }
 

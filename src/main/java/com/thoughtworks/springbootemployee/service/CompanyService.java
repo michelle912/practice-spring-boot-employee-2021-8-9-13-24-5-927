@@ -32,7 +32,7 @@ public class CompanyService {
         return employeeRepository.aggregateByCompanyId(id);
     }
 
-    public List<Company> getCompanyByPageAndPageSize(Integer page, Integer pageSize) {
-        return null;
+    public List<Company> getCompanyByPageAndPageSize(Integer page, Integer pageSize) throws NoCompanyFoundException {
+        return companyRepository.findByPage(page, pageSize);
     }
 }
