@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.entity.Company;
+import com.thoughtworks.springbootemployee.exception.NoCompanyFoundException;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class CompanyService {
         return companyRepository.findAll();
     }
 
-    public Company getCompany(Integer id) {
-        return null;
+    public Company getCompany(Integer id) throws NoCompanyFoundException {
+        return companyRepository.findById(id);
     }
 }
