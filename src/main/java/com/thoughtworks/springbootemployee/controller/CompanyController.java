@@ -32,7 +32,7 @@ public class CompanyController {
     }
 
     @GetMapping(value="/{id}/employees")
-    public List<Employee> getAllEmployeesByCompanyId(@PathVariable Integer id) {
+    public List<Employee> getAllEmployeesByCompanyId(@PathVariable Integer id) throws NoCompanyFoundException {
         return companyService.getAllEmployeesUnderCompany(id);
     }
 

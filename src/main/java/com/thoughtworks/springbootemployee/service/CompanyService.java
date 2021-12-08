@@ -28,7 +28,8 @@ public class CompanyService {
         return companyRepository.findById(id);
     }
 
-    public List<Employee> getAllEmployeesUnderCompany(Integer id) {
+    public List<Employee> getAllEmployeesUnderCompany(Integer id) throws NoCompanyFoundException {
+        companyRepository.findById(id);
         return employeeRepository.aggregateByCompanyId(id);
     }
 
