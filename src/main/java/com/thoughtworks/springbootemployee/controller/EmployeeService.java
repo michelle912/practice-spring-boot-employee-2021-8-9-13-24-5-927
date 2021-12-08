@@ -41,4 +41,7 @@ public class EmployeeService {
         return employeeRepository.findByGender(gender);
     }
 
+    public List<Employee> getEmployeeFromPageAndPageSize(Integer page, Integer pageSize) {
+        return null;
+    }
 }

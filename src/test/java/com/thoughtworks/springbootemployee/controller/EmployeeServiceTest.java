@@ -92,7 +92,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void should_get_correct_employee_with_gender_when_get_employee_by_gender_given_gender() throws Exception {
+    public void should_get_correct_employee_with_gender_when_get_employee_by_gender_given_gender() {
         // given
         String gender = "male";
         Employee employee = new Employee(1, "Tom", 20, gender, 10000);
@@ -110,6 +110,37 @@ public class EmployeeServiceTest {
                 () -> assertEquals(employee.getAge(), actual.get(0).getAge()),
                 () -> assertEquals(employee.getGender(), actual.get(0).getGender()),
                 () -> assertEquals(employee.getSalary(), actual.get(0).getSalary())
+        );
+
+    }
+
+    @Test
+    public void should_get_correct_page_when_get_employee_by_page_given_page_and_pagesize()  {
+        // given
+        Integer page = 1;
+        Integer pageSize = 2;
+        Employee employee3 = new Employee(3, "Tom3", 20, "male", 10000);
+        Employee employee4 = new Employee(4, "Tom4", 20, "male", 10000);
+        List<Employee> employeeList = Arrays.asList(employee3, employee4);
+
+        // when
+        doReturn(employeeList).when(employeeRepository).findByPage(page, pageSize);
+
+        List<Employee> actual = employeeService.getEmployeeFromPageAndPageSize(page, pageSize);
+
+        // then
+        assertAll(
+                () -> assertEquals(2, actual.size()),
+                () -> assertEquals(employeeList.get(0).getId(), actual.get(0).getId()),
+                () -> assertEquals(employeeList.get(0).getName(), actual.get(0).getName()),
+                () -> assertEquals(employeeList.get(0).getAge(), actual.get(0).getAge()),
+                () -> assertEquals(employeeList.get(0).getGender(), actual.get(0).getGender()),
+                () -> assertEquals(employeeList.get(0).getSalary(), actual.get(0).getSalary()),
+                () -> assertEquals(employeeList.get(1).getId(), actual.get(1).getId()),
+                () -> assertEquals(employeeList.get(1).getName(), actual.get(1).getName()),
+                () -> assertEquals(employeeList.get(1).getAge(), actual.get(1).getAge()),
+                () -> assertEquals(employeeList.get(1).getGender(), actual.get(1).getGender()),
+                () -> assertEquals(employeeList.get(1).getSalary(), actual.get(1).getSalary())
         );
 
     }
