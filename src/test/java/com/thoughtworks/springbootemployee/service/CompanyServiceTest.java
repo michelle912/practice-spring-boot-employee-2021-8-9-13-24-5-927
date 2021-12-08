@@ -55,6 +55,25 @@ public class CompanyServiceTest {
 
     }
 
+    @Test
+    public void should_return_correct_companies_when_getAllCompanies_given_id() throws Exception {
+        // given
+        Integer id = 1;
+        Company company = new Company(id, "spring");
+        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000, id)));
 
+        // when
+        doReturn(company).when(companyRepository).findById(id);
+        Company actual = companyService.getCompany(id);
+
+        // then
+        assertAll(
+                () -> assertEquals(company.getId(), actual.getId()),
+                () -> assertEquals(company.getCompanyName(), actual.getCompanyName()),
+                () -> assertEquals(company.getEmployees().size(), actual.getEmployees().size()),
+                () -> assertEquals(company.getEmployees().get(0), actual.getEmployees().get(0))
+        );
+
+    }
 
 }
