@@ -1,5 +1,7 @@
-package com.thoughtworks.springbootemployee.controller;
+package com.thoughtworks.springbootemployee.repository;
 
+import com.thoughtworks.springbootemployee.entity.Employee;
+import com.thoughtworks.springbootemployee.exception.NoEmployeeFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -26,8 +28,11 @@ public class EmployeeRepository {
         return employeeList;
     }
 
-    public Employee findById(Integer id) {
-        return employeeList.stream().filter(employee -> employee.getId().equals(id)).findFirst().orElse(null);
+    public Employee findById(Integer id) throws NoEmployeeFoundException {
+        return employeeList.stream()
+                .filter(employee -> employee.getId().equals(id))
+                .findFirst()
+                .orElseThrow( () -> new NoEmployeeFoundException("Employee not found"));
     }
 
     public List<Employee> findByGender(String gender) {
@@ -49,7 +54,7 @@ public class EmployeeRepository {
         return employee;
     }
 
-    public Employee save(Employee employee) {
+    public Employee save(Employee employee) throws NoEmployeeFoundException {
         Employee existingRecord = findById(employee.getId());
 
         employeeList.remove(existingRecord);
@@ -57,7 +62,7 @@ public class EmployeeRepository {
         return employee;
     }
 
-    public void deleteById(Integer id) {
+    public void deleteById(Integer id) throws NoEmployeeFoundException {
         Employee existingRecord = findById(id);
 
         employeeList.remove(existingRecord);

@@ -1,9 +1,10 @@
-package com.thoughtworks.springbootemployee.controller;
+package com.thoughtworks.springbootemployee.service;
 
+import com.thoughtworks.springbootemployee.entity.Employee;
+import com.thoughtworks.springbootemployee.exception.NoEmployeeFoundException;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class EmployeeService {
@@ -16,24 +17,24 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Employee updateEmployee(Integer id, Employee employee) {
-        Employee existingReord = employeeRepository.findById(id);
+    public Employee updateEmployee(Integer id, Employee employee) throws NoEmployeeFoundException {
+        Employee existingRecord = employeeRepository.findById(id);
 
-        if (existingReord == null || employee == null) {
+        if (existingRecord == null || employee == null) {
             return null;
         }
 
         if(employee.getSalary() != null) {
-            existingReord.setSalary(employee.getSalary());
+            existingRecord.setSalary(employee.getSalary());
         }
 
         if(employee.getAge() != null) {
-            existingReord.setAge(employee.getAge());
+            existingRecord.setAge(employee.getAge());
         }
-        return employeeRepository.save(existingReord);
+        return employeeRepository.save(existingRecord);
     }
 
-    public Employee getEmployee(Integer id) {
+    public Employee getEmployee(Integer id) throws NoEmployeeFoundException {
         return employeeRepository.findById(id);
     }
 
@@ -50,7 +51,7 @@ public class EmployeeService {
     }
 
 
-    public void deleteEmployee(Integer id) {
+    public void deleteEmployee(Integer id) throws NoEmployeeFoundException {
         employeeRepository.deleteById(id);
     }
 }

@@ -1,4 +1,4 @@
-package com.thoughtworks.springbootemployee.controller;
+package com.thoughtworks.springbootemployee.entity;
 
 public class Employee {
     private Integer id;

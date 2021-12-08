@@ -1,15 +1,15 @@
-package com.thoughtworks.springbootemployee.controller;
+package com.thoughtworks.springbootemployee.service;
 
 
+import com.thoughtworks.springbootemployee.entity.Employee;
+import com.thoughtworks.springbootemployee.exception.NoEmployeeFoundException;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,8 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 public class EmployeeServiceTest {
@@ -48,7 +46,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void should_update_employee_when_updateEmployee_given_id_and_employee() {
+    public void should_update_employee_when_updateEmployee_given_id_and_employee() throws Exception{
         // given
         Integer id = 1;
         Employee employee = new Employee(1, "Tom", 20, "male", 10000);
@@ -75,7 +73,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void should_get_correct_employee_when_get_employee_by_id_given_id() {
+    public void should_get_correct_employee_when_get_employee_by_id_given_id() throws Exception{
         // given
         Integer id = 1;
         Employee employee = new Employee(id, "Tom", 20, "male", 10000);
@@ -174,7 +172,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void should_return_nothing_when_delete_given_id() {
+    public void should_return_nothing_when_delete_given_id() throws Exception {
         // given
         Integer id = 1;
 

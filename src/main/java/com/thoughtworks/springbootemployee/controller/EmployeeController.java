@@ -1,7 +1,9 @@
 package com.thoughtworks.springbootemployee.controller;
 
+import com.thoughtworks.springbootemployee.entity.Employee;
+import com.thoughtworks.springbootemployee.exception.NoEmployeeFoundException;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +22,7 @@ public class EmployeeController {
     }
 
     @GetMapping(value="/{id}")
-    public Employee getEmployeeById(@PathVariable Integer id) {
+    public Employee getEmployeeById(@PathVariable Integer id) throws NoEmployeeFoundException {
         return employeeRepository.findById(id);
     }
 
@@ -41,7 +43,7 @@ public class EmployeeController {
     }
 
     @PutMapping(value="/{id}")
-    public Employee updateEmployee(@PathVariable Integer id, @RequestBody Employee employee) {
+    public Employee updateEmployee(@PathVariable Integer id, @RequestBody Employee employee) throws NoEmployeeFoundException {
         Employee existingReord = employeeRepository.findById(id);
 
         if (existingReord == null || employee == null) {
@@ -66,7 +68,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> deleteEmployeeById(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteEmployeeById(@PathVariable Integer id) throws NoEmployeeFoundException {
         employeeRepository.deleteById(id);
         return ResponseEntity.status(204).build();
     }
