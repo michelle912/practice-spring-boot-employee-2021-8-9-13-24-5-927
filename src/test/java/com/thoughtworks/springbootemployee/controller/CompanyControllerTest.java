@@ -141,7 +141,7 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$",hasSize(1)))
                 .andExpect(jsonPath("$[0].id").value(3))
-                .andExpect(jsonPath("$[0].employees" , hasSize(0)));
+                .andExpect(jsonPath("$[0].employees" , hasSize(1)));
 
     }
 

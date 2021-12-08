@@ -2,6 +2,8 @@ package com.thoughtworks.springbootemployee.repository;
 
 import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.entity.Employee;
+import com.thoughtworks.springbootemployee.exception.NoCompanyFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -11,6 +13,9 @@ import java.util.stream.Collectors;
 public class CompanyRepository {
 
     private List<Company> companyList;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     public CompanyRepository() {
         this.companyList = new ArrayList<>();
@@ -27,18 +32,29 @@ public class CompanyRepository {
         return companyList;
     }
 
-    public Company findById(Integer id) {
-        return companyList.stream()
+    public Company findById(Integer id) throws NoCompanyFoundException {
+        Company existingCompany = companyList.stream()
                 .filter(company -> company.getId().equals(id))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new NoCompanyFoundException("Company Not Found."));
+
+        existingCompany.setEmployees(employeeRepository.aggregateByCompanyId(existingCompany.getId()));
+        return existingCompany;
     }
 
-    public List<Company> findByPage(Integer page, Integer pageSize) {
-        return companyList.stream()
+    public List<Company> findByPage(Integer page, Integer pageSize) throws NoCompanyFoundException {
+        List<Company> existingCompanyList = companyList.stream()
                 .skip((long) page*pageSize)
                 .limit(pageSize)
                 .collect(Collectors.toList());
+
+        if (existingCompanyList.isEmpty()) {
+            throw new NoCompanyFoundException("Company Not Found");
+        }
+
+        existingCompanyList.forEach(company -> company.setEmployees(employeeRepository.aggregateByCompanyId(company.getId())));
+
+        return existingCompanyList;
     }
 
     public Company create(Company company) {
@@ -52,7 +68,7 @@ public class CompanyRepository {
         return company;
     }
 
-    public Company save(Company company) {
+    public Company save(Company company) throws NoCompanyFoundException {
         Company existingRecord = findById(company.getId());
 
         companyList.remove(existingRecord);
@@ -60,7 +76,7 @@ public class CompanyRepository {
         return company;
     }
 
-    public void deleteById(Integer id) {
+    public void deleteById(Integer id) throws NoCompanyFoundException {
         Company existingRecord = findById(id);
 
         companyList.remove(existingRecord);

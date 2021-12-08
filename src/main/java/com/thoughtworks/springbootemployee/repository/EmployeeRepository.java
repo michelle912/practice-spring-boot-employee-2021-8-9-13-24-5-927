@@ -73,14 +73,10 @@ public class EmployeeRepository {
         employeeList.clear();
     }
 
-    public List<Employee> aggregateByCompanyId(Integer id) throws NoCompanyFoundException {
+    public List<Employee> aggregateByCompanyId(Integer id) {
         List<Employee> employeeListWithCompanyId = employeeList.stream()
                 .filter(employee -> employee.getCompanyId().equals(id))
                 .collect(Collectors.toList());
-
-        if (employeeListWithCompanyId.isEmpty()) {
-            throw new NoCompanyFoundException("No Company Found.");
-        }
 
         return employeeListWithCompanyId;
 

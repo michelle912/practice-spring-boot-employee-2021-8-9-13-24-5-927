@@ -28,17 +28,17 @@ public class CompanyController {
     }
 
     @GetMapping(value="/{id}")
-    public Company getCompanyById(@PathVariable Integer id) {
+    public Company getCompanyById(@PathVariable Integer id) throws NoCompanyFoundException {
         return companyRepository.findById(id);
     }
 
     @GetMapping(value="/{id}/employees")
-    public List<Employee> getAllEmployeesByCompanyId(@PathVariable Integer id) throws NoCompanyFoundException {
+    public List<Employee> getAllEmployeesByCompanyId(@PathVariable Integer id) {
         return employeeRepository.aggregateByCompanyId(id);
     }
 
     @GetMapping(params = {"page", "pageSize"})
-    public List<Company> getCompanyByPage(Integer page, Integer pageSize) {
+    public List<Company> getCompanyByPage(Integer page, Integer pageSize) throws NoCompanyFoundException {
         return companyRepository.findByPage(page, pageSize);
     }
 
@@ -49,7 +49,7 @@ public class CompanyController {
     }
 
     @PutMapping(value="/{id}")
-    public Company updateCompany(@PathVariable Integer id, @RequestBody Company company) {
+    public Company updateCompany(@PathVariable Integer id, @RequestBody Company company) throws NoCompanyFoundException {
         Company existingReord = companyRepository.findById(id);
 
         if (existingReord == null || company == null) {
@@ -63,7 +63,7 @@ public class CompanyController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> deleteCompanyById(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteCompanyById(@PathVariable Integer id) throws NoCompanyFoundException {
         companyRepository.deleteById(id);
         return ResponseEntity.status(204).build();
     }
