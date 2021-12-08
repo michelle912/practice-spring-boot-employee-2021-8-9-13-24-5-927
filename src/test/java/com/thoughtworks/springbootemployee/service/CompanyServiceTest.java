@@ -145,4 +145,27 @@ public class CompanyServiceTest {
 
     }
 
+    @Test
+    public void should_update_company_when_updateCompany_given_company() throws Exception {
+        // given
+        Integer id = 1;
+        String newName = "spring2";
+        Company existingCompany = new Company(id, "spring");
+        Company input = new Company(id, newName);
+        input.setId(null);
+        Company updatedCompany = new Company(id, newName);
+
+
+        // when
+        doReturn(existingCompany).when(companyRepository).findById(id);
+        existingCompany.setCompanyName(newName);
+        doReturn(existingCompany).when(companyRepository).save(any(Company.class));
+
+        Company actual = companyService.updateCompany(id, input);
+
+        // then
+        assertEquals(updatedCompany, actual);
+
+    }
+
 }

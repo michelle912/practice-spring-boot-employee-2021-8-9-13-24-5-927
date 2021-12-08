@@ -39,4 +39,17 @@ public class CompanyService {
     public Company createCompany(Company company) {
         return companyRepository.create(company);
     }
+
+    public Company updateCompany(Integer id, Company company) throws NoCompanyFoundException {
+        Company existingRecord = companyRepository.findById(id);
+
+        if (company == null) {
+            return null;
+        }
+
+        if(company.getCompanyName() != null) {
+            existingRecord.setCompanyName(company.getCompanyName());
+        }
+        return companyRepository.save(existingRecord);
+    }
 }

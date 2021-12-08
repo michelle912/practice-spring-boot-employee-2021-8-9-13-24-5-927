@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Company {
     private Integer id;
@@ -37,5 +38,18 @@ public class Company {
 
     public void setEmployees(List<Employee> employees) {
         this.employees = employees;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Company company = (Company) o;
+        return Objects.equals(id, company.id) && Objects.equals(companyName, company.companyName) && Objects.equals(employees, company.employees);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, companyName, employees);
     }
 }
