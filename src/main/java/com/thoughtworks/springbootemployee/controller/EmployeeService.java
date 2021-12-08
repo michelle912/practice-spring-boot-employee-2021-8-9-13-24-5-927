@@ -10,7 +10,7 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
 
-    public List<Employee> findAll() {
+    public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
 
@@ -29,5 +29,9 @@ public class EmployeeService {
             existingReord.setAge(employee.getAge());
         }
         return employeeRepository.save(existingReord);
+    }
+
+    public Employee getEmployee(Integer id) {
+        return null;
     }
 }

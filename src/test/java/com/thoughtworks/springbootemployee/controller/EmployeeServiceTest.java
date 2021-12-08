@@ -5,10 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(SpringExtension.class)
@@ -37,7 +33,7 @@ public class EmployeeServiceTest {
 
         // when
         doReturn(employeeList).when(employeeRepository).findAll();
-        List<Employee> actual = employeeService.findAll();
+        List<Employee> actual = employeeService.getAllEmployees();
 
         // then
         assertEquals(employeeList, actual);
@@ -68,6 +64,27 @@ public class EmployeeServiceTest {
                 () -> assertEquals(updatedEmployee.getSalary(), actual.getSalary())
         );
 
+
+    }
+
+    @Test
+    public void should_get_correct_employee_when_get_employee_by_id_given_id() {
+        // given
+        Integer id = 1;
+        Employee employee = new Employee(id, "Tom", 20, "male", 10000);
+
+        // when
+        doReturn(employee).when(employeeRepository).findById(id);
+        Employee actual = employeeService.getEmployee(id);
+
+        // then
+        assertAll(
+                () -> assertEquals(employee.getId(), actual.getId()),
+                () -> assertEquals(employee.getName(), actual.getName()),
+                () -> assertEquals(employee.getAge(), actual.getAge()),
+                () -> assertEquals(employee.getGender(), actual.getGender()),
+                () -> assertEquals(employee.getSalary(), actual.getSalary())
+        );
 
     }
 
