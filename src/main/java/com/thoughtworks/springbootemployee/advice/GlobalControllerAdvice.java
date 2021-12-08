@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class GlobalControllerAdvice {
 
-    @ExceptionHandler({NoEmployeeFoundException.class, NoCompanyFoundException.class})
+    @ExceptionHandler({NoCompanyFoundException.class, NoEmployeeFoundException.class})
     public ErrorResponse handleNotFound(Exception exception) {
         return new ErrorResponse(404, "Entity Not Found.");
     }
