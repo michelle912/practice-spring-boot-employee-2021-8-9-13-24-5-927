@@ -43,6 +43,10 @@ public class EmployeeController {
     public Employee updateEmployee(@PathVariable Integer id, @RequestBody Employee employee) {
         Employee existingReord = employeeRepository.findById(id);
 
+        if (existingReord == null || employee == null) {
+            return null;
+        }
+
         if(employee.getName() != null) {
             existingReord.setName(employee.getName());
         }
@@ -63,6 +67,6 @@ public class EmployeeController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteEmployeeById(@PathVariable Integer id) {
         employeeRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(203).build();
     }
 }

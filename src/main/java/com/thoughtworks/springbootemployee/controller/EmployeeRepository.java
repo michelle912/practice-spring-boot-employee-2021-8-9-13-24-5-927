@@ -63,4 +63,7 @@ public class EmployeeRepository {
         employeeList.remove(existingRecord);
     }
 
+    public void clearAll() {
+        employeeList.clear();
+    }
 }

@@ -44,6 +44,10 @@ public class CompanyController {
     public Company updateCompany(@PathVariable Integer id, @RequestBody Company company) {
         Company existingReord = companyRepository.findById(id);
 
+        if (existingReord == null || company == null) {
+            return null;
+        }
+
         if(company.getCompanyName() != null) {
             existingReord.setCompanyName(company.getCompanyName());
         }
@@ -53,6 +57,6 @@ public class CompanyController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteCompanyById(@PathVariable Integer id) {
         companyRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(203).build();
     }
 }
