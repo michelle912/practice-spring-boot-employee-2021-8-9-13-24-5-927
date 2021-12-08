@@ -52,4 +52,8 @@ public class CompanyService {
         }
         return companyRepository.save(existingRecord);
     }
+
+    public void deleteCompany(Integer id) {
+        return;
+    }
 }

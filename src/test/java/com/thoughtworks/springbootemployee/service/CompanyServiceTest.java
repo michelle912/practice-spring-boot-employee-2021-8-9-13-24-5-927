@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(SpringExtension.class)
@@ -165,6 +167,20 @@ public class CompanyServiceTest {
 
         // then
         assertEquals(updatedCompany, actual);
+
+    }
+
+    @Test
+    public void should_delete_company_with_id_when_deleteCompanyById_given_id() throws Exception {
+        // given
+        Integer id = 1;
+        Company company = new Company(id, "spring");
+
+        // when
+        companyService.deleteCompany(id);
+
+        // then
+        Mockito.verify(companyRepository, times(1)).deleteById(id);
 
     }
 
