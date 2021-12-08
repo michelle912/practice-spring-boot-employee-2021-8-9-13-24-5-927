@@ -20,7 +20,6 @@ public class CompanyRepository {
         Company company4 = new Company(4, "spring");
         Company company5 = new Company(5, "spring");
         Company company6 = new Company(6, "spring");
-        company1.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000)));
         companyList.addAll(Arrays.asList(company1, company2, company3, company4, company5, company6));
     }
 
@@ -33,12 +32,6 @@ public class CompanyRepository {
                 .filter(company -> company.getId().equals(id))
                 .findFirst()
                 .orElse(null);
-    }
-
-    public List<Employee> findEmployeeListById(Integer id) {
-        return Optional.ofNullable(findById(id))
-                .map(Company::getEmployees)
-                .orElse(Collections.emptyList());
     }
 
     public List<Company> findByPage(Integer page, Integer pageSize) {

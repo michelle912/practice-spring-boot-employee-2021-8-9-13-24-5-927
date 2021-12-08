@@ -3,7 +3,9 @@ package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.entity.Employee;
+import com.thoughtworks.springbootemployee.exception.NoCompanyFoundException;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ public class CompanyController {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     @GetMapping()
     public List<Company> getAllCompanies() {
         return companyRepository.findAll();
@@ -28,8 +33,8 @@ public class CompanyController {
     }
 
     @GetMapping(value="/{id}/employees")
-    public List<Employee> getAllEmployeesByCompanyId(@PathVariable Integer id) {
-        return companyRepository.findEmployeeListById(id);
+    public List<Employee> getAllEmployeesByCompanyId(@PathVariable Integer id) throws NoCompanyFoundException {
+        return employeeRepository.aggregateByCompanyId(id);
     }
 
     @GetMapping(params = {"page", "pageSize"})

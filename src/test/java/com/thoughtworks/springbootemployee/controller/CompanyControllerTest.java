@@ -37,7 +37,7 @@ public class CompanyControllerTest {
     public void should_get_all_companies_when_getAllCompanies_given_companies() throws Exception {
         // given
         Company company = new Company(1, "spring");
-        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000)));
+        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000,1)));
         companyRepository.create(company);
 
         // when
@@ -60,7 +60,7 @@ public class CompanyControllerTest {
     public void should_return_correct_companies_when_getAllCompanies_given_id() throws Exception {
         // given
         Company company = new Company(1, "spring");
-        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000)));
+        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000, 1)));
         companyRepository.create(company);
 
         // when
@@ -82,7 +82,7 @@ public class CompanyControllerTest {
     public void should_get_all_employees_under_company_when_getAllEmployeesByCompanyId_given_id() throws Exception {
         // given
         Company company = new Company(1, "spring");
-        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000)));
+        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000,1)));
         companyRepository.create(company);
 
         // when
@@ -104,7 +104,7 @@ public class CompanyControllerTest {
     public void should_company_in_page_when_getAllEmployeesByCompanyId_given_id() throws Exception {
         // given
         Company company = new Company(1, "spring");
-        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000)));
+        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000,1)));
         companyRepository.create(company);
 
         // when
@@ -125,7 +125,7 @@ public class CompanyControllerTest {
     public void should_comapny_in_page_under_company_when_getAllCompanyByPage_given_page_pageSize() throws Exception {
         // given
         Company company1 = new Company(1, "spring");
-        company1.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000)));
+        company1.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000,1)));
         companyRepository.create(company1);
 
         Company company2 = new Company(2, "spring2");
@@ -184,7 +184,7 @@ public class CompanyControllerTest {
     public void should_update_comapny_when_updateCompany_given_company() throws Exception {
         // given
         Company company1 = new Company(1, "spring");
-        company1.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000)));
+        company1.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000,1)));
         companyRepository.create(company1);
 
         String newCompany = "{\n" +
@@ -217,7 +217,7 @@ public class CompanyControllerTest {
     public void should_delete_company_with_id_when_deleteCompanyById_given_id() throws Exception {
         // given
         Company company = new Company(1, "spring");
-        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000)));
+        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000,1)));
         companyRepository.create(company);
 
         // when

@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.repository;
 
 import com.thoughtworks.springbootemployee.entity.Employee;
+import com.thoughtworks.springbootemployee.exception.NoCompanyFoundException;
 import com.thoughtworks.springbootemployee.exception.NoEmployeeFoundException;
 import org.springframework.stereotype.Repository;
 
@@ -15,12 +16,12 @@ public class EmployeeRepository {
 
     public EmployeeRepository() {
         employeeList = new ArrayList<>();
-        employeeList.add(new Employee(1,"Lily1", 20, "Female", 8000));
-        employeeList.add(new Employee(2,"Lily2", 20, "Female", 8000));
-        employeeList.add(new Employee(3,"Lily3", 20, "Female", 8000));
-        employeeList.add(new Employee(4,"Lily4", 20, "Female", 8000));
-        employeeList.add(new Employee(5,"Lily5", 20, "Female", 8000));
-        employeeList.add(new Employee(6,"Tom", 20, "male", 8000));
+        employeeList.add(new Employee(1,"Lily1", 20, "Female", 8000,1));
+        employeeList.add(new Employee(2,"Lily2", 20, "Female", 8000,2));
+        employeeList.add(new Employee(3,"Lily3", 20, "Female", 8000,3));
+        employeeList.add(new Employee(4,"Lily4", 20, "Female", 8000,4));
+        employeeList.add(new Employee(5,"Lily5", 20, "Female", 8000,5));
+        employeeList.add(new Employee(6,"Tom", 20, "male", 8000,6));
 
     }
 
@@ -70,5 +71,18 @@ public class EmployeeRepository {
 
     public void clearAll() {
         employeeList.clear();
+    }
+
+    public List<Employee> aggregateByCompanyId(Integer id) throws NoCompanyFoundException {
+        List<Employee> employeeListWithCompanyId = employeeList.stream()
+                .filter(employee -> employee.getCompanyId().equals(id))
+                .collect(Collectors.toList());
+
+        if (employeeListWithCompanyId.isEmpty()) {
+            throw new NoCompanyFoundException("No Company Found.");
+        }
+
+        return employeeListWithCompanyId;
+
     }
 }
