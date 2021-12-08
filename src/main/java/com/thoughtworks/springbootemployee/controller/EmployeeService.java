@@ -2,6 +2,8 @@ package com.thoughtworks.springbootemployee.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class EmployeeService {
@@ -35,3 +37,7 @@ public class EmployeeService {
         return employeeRepository.findById(id);
     }
 }
+
+    public List<Employee> getEmployeeWithGender(String gender) {
+        return Collections.emptyList();
+    }

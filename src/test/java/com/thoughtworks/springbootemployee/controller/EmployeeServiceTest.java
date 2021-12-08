@@ -91,6 +91,28 @@ public class EmployeeServiceTest {
 
     }
 
+    @Test
+    public void should_get_correct_employee_with_gender_when_get_employee_by_gender_given_gender() throws Exception {
+        // given
+        String gender = "male";
+        Employee employee = new Employee(1, "Tom", 20, gender, 10000);
+
+        // when
+        doReturn(Arrays.asList(employee)).when(employeeRepository).findByGender(gender);
+
+        List<Employee> actual = employeeService.getEmployeeWithGender(gender);
+
+        // then
+        assertAll(
+                () -> assertEquals(1, actual.size()),
+                () -> assertEquals(employee.getId(), actual.get(0).getId()),
+                () -> assertEquals(employee.getName(), actual.get(0).getName()),
+                () -> assertEquals(employee.getAge(), actual.get(0).getAge()),
+                () -> assertEquals(employee.getGender(), actual.get(0).getGender()),
+                () -> assertEquals(employee.getSalary(), actual.get(0).getSalary())
+        );
+
+    }
 
 
 }
