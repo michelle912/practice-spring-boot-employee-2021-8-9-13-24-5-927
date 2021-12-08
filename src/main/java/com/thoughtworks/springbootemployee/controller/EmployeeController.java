@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,6 +68,6 @@ public class EmployeeController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteEmployeeById(@PathVariable Integer id) {
         employeeRepository.deleteById(id);
-        return ResponseEntity.status(203).build();
+        return ResponseEntity.status(204).build();
     }
 }

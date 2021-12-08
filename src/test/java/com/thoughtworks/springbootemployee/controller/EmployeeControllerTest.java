@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.controller;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class EmployeeControllerTest {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    @BeforeAll
+    @BeforeEach
     void setUp(){
         employeeRepository.clearAll();
     }
@@ -147,6 +148,49 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$[1].age").value(20))
                 .andExpect(jsonPath("$[1].gender").value("male"))
                 .andExpect(jsonPath("$[1].salary").value(10000));;
+
+    }
+
+    @Test
+    public void should_update_employee_when_updateEmployee_given_id_and_employee() throws Exception {
+        // given
+        Employee employee = new Employee(1, "Tom", 20, "male", 10000);
+        employeeRepository.create(employee);
+
+        String updateEmployee = "{\n" +
+                "        \"id\": 1,\n" +
+                "        \"name\": \"Tom\",\n" +
+                "        \"age\": 50,\n" +
+                "        \"gender\": \"male\",\n" +
+                "        \"salary\": 8000\n" +
+                "    }";
+
+        // when
+
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.put("/employees/{id}", employee.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updateEmployee))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.name").value("Tom"))
+                .andExpect(jsonPath("$.age").value(50))
+                .andExpect(jsonPath("$.gender").value("male"))
+                .andExpect(jsonPath("$.salary").value(8000));
+
+    }
+
+    @Test
+    public void should_return_nothing_when_delete_given_id() throws Exception {
+        // given
+        Employee employee = new Employee(1, "Tom", 20, "male", 10000);
+        employeeRepository.create(employee);
+
+        // when
+
+        // then
+        mockMvc.perform(MockMvcRequestBuilders.delete("/employees/{id}" , employee.getId()))
+                .andExpect(status().isNoContent());
 
     }
 
