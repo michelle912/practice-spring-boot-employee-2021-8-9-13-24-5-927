@@ -31,4 +31,8 @@ public class CompanyService {
     public List<Employee> getAllEmployeesUnderCompany(Integer id) {
         return employeeRepository.aggregateByCompanyId(id);
     }
+
+    public List<Company> getCompanyByPageAndPageSize(Integer page, Integer pageSize) {
+        return null;
+    }
 }

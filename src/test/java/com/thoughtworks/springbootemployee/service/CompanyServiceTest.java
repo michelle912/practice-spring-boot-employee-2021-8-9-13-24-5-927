@@ -104,4 +104,26 @@ public class CompanyServiceTest {
 
     }
 
+    @Test
+    public void should_get_company_in_page_when_getCompanyByPage_given_page_and_pageSize() throws Exception {
+        // given
+        Integer page = 1;
+        Integer pageSize = 2;
+        Company company1 = new Company(1, "spring");
+        Company company2 = new Company(2, "spring2");
+        Company company3 = new Company(3, "spring3");
+        List<Company> companyList = Arrays.asList(company1,company2, company3);
+
+        // when
+        doReturn(Arrays.asList(company3)).when(companyRepository).findByPage(page, pageSize);
+
+        List<Company> actual = companyService.getCompanyByPageAndPageSize(page, pageSize);
+
+        // then
+        assertAll(
+                () -> assertEquals(1, actual.size()),
+                () -> assertEquals(companyList.get(0), actual.get(0))
+        );
+    }
+
 }
