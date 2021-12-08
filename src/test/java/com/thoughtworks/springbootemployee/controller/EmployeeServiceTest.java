@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -168,6 +170,20 @@ public class EmployeeServiceTest {
                 () -> assertEquals(createdEmployee.getGender(), actual.getGender()),
                 () -> assertEquals(createdEmployee.getSalary(), actual.getSalary())
         );
+
+    }
+
+    @Test
+    public void should_return_nothing_when_delete_given_id() {
+        // given
+        Integer id = 1;
+
+        // when
+        employeeService.deleteEmployee(id);
+
+        // then
+        Mockito.verify(employeeRepository, times(1)).deleteById(id);
+
 
     }
 
