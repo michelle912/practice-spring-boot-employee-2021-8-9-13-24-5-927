@@ -36,8 +36,10 @@ public class EmployeeService {
     public Employee getEmployee(Integer id) {
         return employeeRepository.findById(id);
     }
-}
+
 
     public List<Employee> getEmployeeWithGender(String gender) {
         return Collections.emptyList();
     }
+
+}
