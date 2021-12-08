@@ -35,4 +35,8 @@ public class CompanyService {
     public List<Company> getCompanyByPageAndPageSize(Integer page, Integer pageSize) throws NoCompanyFoundException {
         return companyRepository.findByPage(page, pageSize);
     }
+
+    public Company createCompany(Company company) {
+        return null;
+    }
 }

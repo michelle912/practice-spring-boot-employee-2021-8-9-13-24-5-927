@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -20,6 +21,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -124,6 +126,25 @@ public class CompanyServiceTest {
                 () -> assertEquals(1, actual.size()),
                 () -> assertEquals(company3, actual.get(0))
         );
+    }
+
+    @Test
+    public void should_create_company_when_createCompany_given_company() throws Exception {
+        // given
+        Company incomingCompany = new Company(1, "spring");
+        incomingCompany.setId(null);
+        Company company = new Company(1, "spring");
+
+        // when
+        doReturn(company).when(companyRepository).save(incomingCompany);
+
+        Company actual = companyService.createCompany(incomingCompany);
+
+        // then
+        assertAll(
+                () -> assertEquals(company, actual)
+        );
+
     }
 
 }
