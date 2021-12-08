@@ -42,7 +42,7 @@ public class CompanyServiceTest {
         // when
         doReturn(companyList).when(companyRepository).findAll();
 
-        List<Company> actual = companyService.getCompany(1);
+        List<Company> actual = companyService.getAllCompanies();
 
         // then
         assertAll(
@@ -54,5 +54,7 @@ public class CompanyServiceTest {
         );
 
     }
+
+
 
 }
