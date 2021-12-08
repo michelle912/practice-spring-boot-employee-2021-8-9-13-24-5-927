@@ -15,6 +15,19 @@ public class EmployeeService {
     }
 
     public Employee updateEmployee(Integer id, Employee employee) {
-        return null;
+        Employee existingReord = employeeRepository.findById(id);
+
+        if (existingReord == null || employee == null) {
+            return null;
+        }
+
+        if(employee.getSalary() != null) {
+            existingReord.setSalary(employee.getSalary());
+        }
+
+        if(employee.getAge() != null) {
+            existingReord.setAge(employee.getAge());
+        }
+        return employeeRepository.save(existingReord);
     }
 }
