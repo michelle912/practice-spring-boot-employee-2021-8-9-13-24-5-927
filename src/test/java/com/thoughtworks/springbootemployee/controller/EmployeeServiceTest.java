@@ -162,11 +162,11 @@ public class EmployeeServiceTest {
 
         // then
         assertAll(
-                () -> assertEquals(employee.getId(), actual.getId()),
-                () -> assertEquals(employee.getName(), actual.getName()),
-                () -> assertEquals(employee.getAge(), actual.getAge()),
-                () -> assertEquals(employee.getGender(), actual.getGender()),
-                () -> assertEquals(employee.getSalary(), actual.getSalary())
+                () -> assertEquals(createdEmployee.getId(), actual.getId()),
+                () -> assertEquals(createdEmployee.getName(), actual.getName()),
+                () -> assertEquals(createdEmployee.getAge(), actual.getAge()),
+                () -> assertEquals(createdEmployee.getGender(), actual.getGender()),
+                () -> assertEquals(createdEmployee.getSalary(), actual.getSalary())
         );
 
     }
