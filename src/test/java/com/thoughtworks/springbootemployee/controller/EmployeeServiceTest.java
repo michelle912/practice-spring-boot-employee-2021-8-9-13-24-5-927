@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 public class EmployeeServiceTest {
@@ -141,6 +143,30 @@ public class EmployeeServiceTest {
                 () -> assertEquals(employeeList.get(1).getAge(), actual.get(1).getAge()),
                 () -> assertEquals(employeeList.get(1).getGender(), actual.get(1).getGender()),
                 () -> assertEquals(employeeList.get(1).getSalary(), actual.get(1).getSalary())
+        );
+
+    }
+
+    @Test
+    public void should_return_employee_when_create_given_employee() {
+        // given
+        Employee employee = new Employee(1, "Tom", 20, "male", 10000);
+        employee.setId(null);
+        Employee createdEmployee = new Employee(1, "Tom", 20, "male", 10000);
+
+
+        // when
+        doReturn(createdEmployee).when(employeeRepository).create(employee);
+
+        Employee actual = employeeService.createEmployee(employee);
+
+        // then
+        assertAll(
+                () -> assertEquals(employee.getId(), actual.getId()),
+                () -> assertEquals(employee.getName(), actual.getName()),
+                () -> assertEquals(employee.getAge(), actual.getAge()),
+                () -> assertEquals(employee.getGender(), actual.getGender()),
+                () -> assertEquals(employee.getSalary(), actual.getSalary())
         );
 
     }
