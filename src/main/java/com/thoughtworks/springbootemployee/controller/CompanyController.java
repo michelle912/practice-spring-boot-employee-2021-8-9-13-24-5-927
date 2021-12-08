@@ -57,6 +57,6 @@ public class CompanyController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteCompanyById(@PathVariable Integer id) {
         companyRepository.deleteById(id);
-        return ResponseEntity.status(203).build();
+        return ResponseEntity.status(204).build();
     }
 }

@@ -71,5 +71,9 @@ public class CompanyRepository {
         companyList.remove(existingRecord);
     }
 
+    public void clearAll(){
+        companyList.clear();
+    }
+
 
 }
