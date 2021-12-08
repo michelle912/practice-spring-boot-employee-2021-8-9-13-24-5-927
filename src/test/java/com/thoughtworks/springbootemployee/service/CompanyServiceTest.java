@@ -136,14 +136,12 @@ public class CompanyServiceTest {
         Company company = new Company(1, "spring");
 
         // when
-        doReturn(company).when(companyRepository).save(incomingCompany);
+        doReturn(company).when(companyRepository).create(incomingCompany);
 
         Company actual = companyService.createCompany(incomingCompany);
 
         // then
-        assertAll(
-                () -> assertEquals(company, actual)
-        );
+         assertEquals(company, actual);
 
     }
 
