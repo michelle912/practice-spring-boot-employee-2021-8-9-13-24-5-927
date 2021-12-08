@@ -6,7 +6,9 @@ import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.exception.NoCompanyFoundException;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
+import com.thoughtworks.springbootemployee.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,54 +19,42 @@ import java.util.List;
 public class CompanyController {
 
     @Autowired
-    private CompanyRepository companyRepository;
-
-    @Autowired
-    private EmployeeRepository employeeRepository;
+    private CompanyService companyService;
 
     @GetMapping()
     public List<Company> getAllCompanies() {
-        return companyRepository.findAll();
+        return companyService.getAllCompanies();
     }
 
     @GetMapping(value="/{id}")
     public Company getCompanyById(@PathVariable Integer id) throws NoCompanyFoundException {
-        return companyRepository.findById(id);
+        return companyService.getCompany(id);
     }
 
     @GetMapping(value="/{id}/employees")
     public List<Employee> getAllEmployeesByCompanyId(@PathVariable Integer id) {
-        return employeeRepository.aggregateByCompanyId(id);
+        return companyService.getAllEmployeesUnderCompany(id);
     }
 
     @GetMapping(params = {"page", "pageSize"})
     public List<Company> getCompanyByPage(Integer page, Integer pageSize) throws NoCompanyFoundException {
-        return companyRepository.findByPage(page, pageSize);
+        return companyService.getCompanyByPageAndPageSize(page, pageSize);
     }
 
     @PostMapping()
-    public ResponseEntity<Company> createCompany(@RequestBody Company company) {
-        Company createdCompany = companyRepository.create(company);
-        return ResponseEntity.status(201).body(createdCompany);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Company createCompany(@RequestBody Company company) {
+        return companyService.createCompany(company);
     }
 
     @PutMapping(value="/{id}")
     public Company updateCompany(@PathVariable Integer id, @RequestBody Company company) throws NoCompanyFoundException {
-        Company existingReord = companyRepository.findById(id);
-
-        if (existingReord == null || company == null) {
-            return null;
-        }
-
-        if(company.getCompanyName() != null) {
-            existingReord.setCompanyName(company.getCompanyName());
-        }
-        return companyRepository.save(existingReord);
+        return companyService.updateCompany(id, company);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> deleteCompanyById(@PathVariable Integer id) throws NoCompanyFoundException {
-        companyRepository.deleteById(id);
-        return ResponseEntity.status(204).build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCompanyById(@PathVariable Integer id) throws NoCompanyFoundException {
+        companyService.deleteCompany(id);
     }
 }
