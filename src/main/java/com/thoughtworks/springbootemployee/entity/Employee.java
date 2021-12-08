@@ -1,5 +1,7 @@
 package com.thoughtworks.springbootemployee.entity;
 
+import java.util.Objects;
+
 public class Employee {
     private Integer id;
     private String name;
@@ -63,5 +65,18 @@ public class Employee {
 
     public void setCompanyId(Integer companyId) {
         this.companyId = companyId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return Objects.equals(id, employee.id) && Objects.equals(name, employee.name) && Objects.equals(age, employee.age) && Objects.equals(gender, employee.gender) && Objects.equals(salary, employee.salary) && Objects.equals(companyId, employee.companyId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, age, gender, salary, companyId);
     }
 }
