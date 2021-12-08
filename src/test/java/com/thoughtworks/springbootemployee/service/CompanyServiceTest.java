@@ -33,7 +33,7 @@ public class CompanyServiceTest {
     CompanyService companyService;
 
     @Test
-    public void should_return_correct_companies_when_getAllCompanies_given_id() throws Exception {
+    public void should_get_all_companies_when_getAllCompanies_given_companies() throws Exception {
         // given
         Company company = new Company(1, "spring");
         company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000,1)));
