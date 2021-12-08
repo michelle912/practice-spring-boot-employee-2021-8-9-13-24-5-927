@@ -74,11 +74,10 @@ public class EmployeeRepository {
     }
 
     public List<Employee> aggregateByCompanyId(Integer id) {
-        List<Employee> employeeListWithCompanyId = employeeList.stream()
+
+        return employeeList.stream()
                 .filter(employee -> employee.getCompanyId().equals(id))
                 .collect(Collectors.toList());
-
-        return employeeListWithCompanyId;
 
     }
 }

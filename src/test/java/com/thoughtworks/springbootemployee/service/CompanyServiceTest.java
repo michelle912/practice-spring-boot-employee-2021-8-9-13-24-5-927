@@ -92,7 +92,7 @@ public class CompanyServiceTest {
         company.setEmployees(employeeList);
 
         // when
-        doReturn(employeeList).when(employeeRepository).aggregateByCompanyId(companyId1);
+        doReturn(Arrays.asList(employee1)).when(employeeRepository).aggregateByCompanyId(companyId1);
 
         List<Employee> actual = companyService.getAllEmployeesUnderCompany(companyId1);
 
