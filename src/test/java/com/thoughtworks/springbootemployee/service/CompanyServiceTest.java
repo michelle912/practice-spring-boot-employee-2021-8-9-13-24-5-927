@@ -32,6 +32,9 @@ public class CompanyServiceTest {
     @InjectMocks
     CompanyService companyService;
 
+    @Mock
+    EmployeeRepository employeeRepository;
+
     @Test
     public void should_get_all_companies_when_getAllCompanies_given_companies() throws Exception {
         // given
@@ -72,6 +75,31 @@ public class CompanyServiceTest {
                 () -> assertEquals(company.getCompanyName(), actual.getCompanyName()),
                 () -> assertEquals(company.getEmployees().size(), actual.getEmployees().size()),
                 () -> assertEquals(company.getEmployees().get(0), actual.getEmployees().get(0))
+        );
+
+    }
+
+    @Test
+    public void should_get_all_employees_under_company_when_getAllEmployeesByCompanyId_given_id() throws Exception {
+        // given
+        Integer companyId1 = 1;
+        Integer companyId2 = 2;
+        Company company = new Company(companyId1, "spring");
+        Employee employee1 = new Employee(1, "Lily1", 20, "Female", 8000,companyId1);
+        Employee employee2 = new Employee(2, "Lily2", 20, "Female", 8000,companyId2);
+        List<Employee> employeeList = Arrays.asList(employee1, employee2);
+
+        company.setEmployees(employeeList);
+
+        // when
+        doReturn(employeeList).when(employeeRepository).aggregateByCompanyId(companyId1);
+
+        List<Employee> actual = companyService.getAllEmployeesUnderCompany(companyId1);
+
+        // then
+        assertAll(
+                () -> assertEquals(1, actual.size()),
+                () -> assertEquals(employeeList.get(0), actual.get(0))
         );
 
     }
