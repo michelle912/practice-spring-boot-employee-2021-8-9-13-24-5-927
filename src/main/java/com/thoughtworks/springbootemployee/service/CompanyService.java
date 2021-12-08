@@ -53,7 +53,7 @@ public class CompanyService {
         return companyRepository.save(existingRecord);
     }
 
-    public void deleteCompany(Integer id) {
-        return;
+    public void deleteCompany(Integer id) throws NoCompanyFoundException {
+        companyRepository.deleteById(id);
     }
 }
