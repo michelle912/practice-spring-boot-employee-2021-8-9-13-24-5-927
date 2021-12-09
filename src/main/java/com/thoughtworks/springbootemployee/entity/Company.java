@@ -7,12 +7,15 @@ import java.util.Objects;
 
 public class Company {
     private String id;
-    private String companyName;
+    private String name;
     private List<Employee> employees;
+
+    public Company() {
+    }
 
     public Company(String id, String companyName) {
         this.id = id;
-        this.companyName = companyName;
+        this.name = companyName;
         this.employees = new ArrayList<>();
     }
 
@@ -24,12 +27,12 @@ public class Company {
         this.id = id;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public String getName() {
+        return name;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<Employee> getEmployees() {
@@ -45,11 +48,11 @@ public class Company {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Company company = (Company) o;
-        return Objects.equals(id, company.id) && Objects.equals(companyName, company.companyName) && Objects.equals(employees, company.employees);
+        return Objects.equals(id, company.id) && Objects.equals(name, company.name) && Objects.equals(employees, company.employees);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, companyName, employees);
+        return Objects.hash(id, name, employees);
     }
 }

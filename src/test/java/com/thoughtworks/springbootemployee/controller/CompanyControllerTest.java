@@ -4,6 +4,7 @@ import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.service.CompanyService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,11 @@ public class CompanyControllerTest {
         companyRepository.clearAll();
     }
 
+    @AfterEach
+    void cleanUp() {
+        companyRepository.clearAll();
+    }
+
     @Test
     public void should_get_all_companies_when_getAllCompanies_given_companies() throws Exception {
         // given
@@ -51,12 +57,11 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$",hasSize(1)))
                 .andExpect(jsonPath("$[0].id").isString())
-                .andExpect(jsonPath("$[0].companyName").value("spring"))
+                .andExpect(jsonPath("$[0].name").value("spring"))
                 .andExpect(jsonPath("$[0].employees", hasSize(1)))
                 .andExpect(jsonPath("$[0].employees[0].name").value("Lily1"))
                 .andExpect(jsonPath("$[0].employees[0].age").value(20))
-                .andExpect(jsonPath("$[0].employees[0].gender").value("Female"))
-                .andExpect(jsonPath("$[0].employees[0].salary").value(8000));
+                .andExpect(jsonPath("$[0].employees[0].gender").value("Female"));
 
     }
 
@@ -73,12 +78,11 @@ public class CompanyControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/companies/{id}" , company.getId()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.id").isString())
-                .andExpect(jsonPath("$.companyName").value("spring"))
+                .andExpect(jsonPath("$.name").value("spring"))
                 .andExpect(jsonPath("$.employees", hasSize(1)))
                 .andExpect(jsonPath("$.employees[0].name").value("Lily1"))
                 .andExpect(jsonPath("$.employees[0].age").value(20))
-                .andExpect(jsonPath("$.employees[0].gender").value("Female"))
-                .andExpect(jsonPath("$.employees[0].salary").value(8000));
+                .andExpect(jsonPath("$.employees[0].gender").value("Female"));
 
     }
 
@@ -98,8 +102,7 @@ public class CompanyControllerTest {
                 .andExpect(jsonPath("$[0].id").isString())
                 .andExpect(jsonPath("$[0].name").value("Lily1"))
                 .andExpect(jsonPath("$[0].age").value(20))
-                .andExpect(jsonPath("$[0].gender").value("Female"))
-                .andExpect(jsonPath("$[0].salary").value(8000));
+                .andExpect(jsonPath("$[0].gender").value("Female"));
 
     }
 
@@ -120,8 +123,7 @@ public class CompanyControllerTest {
                 .andExpect(jsonPath("$[0].id").isString())
                 .andExpect(jsonPath("$[0].name").value("Lily1"))
                 .andExpect(jsonPath("$[0].age").value(20))
-                .andExpect(jsonPath("$[0].gender").value("Female"))
-                .andExpect(jsonPath("$[0].salary").value(8000));
+                .andExpect(jsonPath("$[0].gender").value("Female"));
 
     }
 
@@ -153,17 +155,7 @@ public class CompanyControllerTest {
     public void should_create_company_when_createCompany_given_company() throws Exception {
         // given
         String company = "{\n" +
-                "        \"id\": 1,\n" +
-                "        \"companyName\": \"spring\",\n" +
-                "        \"employees\": [\n" +
-                "            {\n" +
-                "                \"id\": 1,\n" +
-                "                \"name\": \"Lily1\",\n" +
-                "                \"age\": 20,\n" +
-                "                \"gender\": \"Female\",\n" +
-                "                \"salary\": 8000\n" +
-                "            }\n" +
-                "        ]\n" +
+                "        \"name\": \"spring\"\n" +
                 "    }";
 
         // when
@@ -174,12 +166,7 @@ public class CompanyControllerTest {
                 .content(company))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(jsonPath("$.id").isString())
-                .andExpect(jsonPath("$.companyName").value("spring"))
-                .andExpect(jsonPath("$.employees", hasSize(1)))
-                .andExpect(jsonPath("$.employees[0].name").value("Lily1"))
-                .andExpect(jsonPath("$.employees[0].age").value(20))
-                .andExpect(jsonPath("$.employees[0].gender").value("Female"))
-                .andExpect(jsonPath("$.employees[0].salary").value(8000));
+                .andExpect(jsonPath("$.name").value("spring"));
 
     }
 
@@ -192,17 +179,7 @@ public class CompanyControllerTest {
         companyRepository.create(company1);
 
         String newCompany = "{\n" +
-                "        \"id\": 1,\n" +
-                "        \"companyName\": \"new spring\",\n" +
-                "        \"employees\": [\n" +
-                "            {\n" +
-                "                \"id\": 1,\n" +
-                "                \"name\": \"Lily1\",\n" +
-                "                \"age\": 20,\n" +
-                "                \"gender\": \"Female\",\n" +
-                "                \"salary\": 8000\n" +
-                "            }\n" +
-                "        ]\n" +
+                "        \"name\": \"new spring\"\n" +
                 "    }";
 
         // when
@@ -213,7 +190,7 @@ public class CompanyControllerTest {
                 .content(newCompany))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.companyName").value("new spring"));
+                .andExpect(jsonPath("$.name").value("new spring"));
 
     }
 

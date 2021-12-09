@@ -48,8 +48,8 @@ public class CompanyService {
             return null;
         }
 
-        if(company.getCompanyName() != null) {
-            existingRecord.setCompanyName(company.getCompanyName());
+        if(company.getName() != null) {
+            existingRecord.setName(company.getName());
         }
         return companyRepository.save(existingRecord);
     }

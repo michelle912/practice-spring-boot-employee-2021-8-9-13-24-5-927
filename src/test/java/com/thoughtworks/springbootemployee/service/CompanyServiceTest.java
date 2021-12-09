@@ -49,7 +49,7 @@ public class CompanyServiceTest {
         assertAll(
                 () -> assertEquals(1, actual.size()),
                 () -> assertEquals(companyList.get(0).getId(), actual.get(0).getId()),
-                () -> assertEquals(companyList.get(0).getCompanyName(), actual.get(0).getCompanyName()),
+                () -> assertEquals(companyList.get(0).getName(), actual.get(0).getName()),
                 () -> assertEquals(companyList.get(0).getEmployees().size(), actual.get(0).getEmployees().size()),
                 () -> assertEquals(companyList.get(0).getEmployees().get(0), actual.get(0).getEmployees().get(0))
         );
@@ -85,7 +85,7 @@ public class CompanyServiceTest {
         // then
         assertAll(
                 () -> assertEquals(company.getId(), actual.getId()),
-                () -> assertEquals(company.getCompanyName(), actual.getCompanyName()),
+                () -> assertEquals(company.getName(), actual.getName()),
                 () -> assertEquals(company.getEmployees().size(), actual.getEmployees().size()),
                 () -> assertEquals(company.getEmployees().get(0), actual.getEmployees().get(0))
         );
@@ -200,7 +200,7 @@ public class CompanyServiceTest {
 
         // when
         doReturn(existingCompany).when(companyRepository).findById(id);
-        existingCompany.setCompanyName(newName);
+        existingCompany.setName(newName);
         doReturn(existingCompany).when(companyRepository).save(any(Company.class));
 
         Company actual = companyService.updateCompany(id, input);

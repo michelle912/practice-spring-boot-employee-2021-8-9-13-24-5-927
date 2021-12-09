@@ -1,9 +1,14 @@
 package com.thoughtworks.springbootemployee.controller;
 
 
+import com.thoughtworks.springbootemployee.dto.CompanyRequest;
+import com.thoughtworks.springbootemployee.dto.CompanyResponse;
+import com.thoughtworks.springbootemployee.dto.EmployeeResponse;
 import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.exception.NoCompanyFoundException;
+import com.thoughtworks.springbootemployee.mapper.CompanyMapper;
+import com.thoughtworks.springbootemployee.mapper.EmployeeMapper;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import com.thoughtworks.springbootemployee.service.CompanyService;
@@ -13,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/companies")
@@ -21,19 +27,28 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
+    @Autowired
+    private CompanyMapper companyMapper;
+
+    @Autowired
+    private EmployeeMapper employeeMapper;
+
     @GetMapping()
     public List<Company> getAllCompanies() {
         return companyService.getAllCompanies();
     }
 
     @GetMapping(value="/{id}")
-    public Company getCompanyById(@PathVariable String id) throws NoCompanyFoundException {
-        return companyService.getCompany(id);
+    public CompanyResponse getCompanyById(@PathVariable String id) throws NoCompanyFoundException {
+        return companyMapper.toResponse(companyService.getCompany(id));
     }
 
     @GetMapping(value="/{id}/employees")
-    public List<Employee> getAllEmployeesByCompanyId(@PathVariable String id) throws NoCompanyFoundException {
-        return companyService.getAllEmployeesUnderCompany(id);
+    public List<EmployeeResponse> getAllEmployeesByCompanyId(@PathVariable String id) throws NoCompanyFoundException {
+        return companyService.getAllEmployeesUnderCompany(id)
+                .stream()
+                .map(employee -> employeeMapper.toResponse(employee))
+                .collect(Collectors.toList());
     }
 
     @GetMapping(params = {"page", "pageSize"})
@@ -43,13 +58,13 @@ public class CompanyController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Company createCompany(@RequestBody Company company) {
-        return companyService.createCompany(company);
+    public Company createCompany(@RequestBody CompanyRequest companyRequest) {
+        return companyService.createCompany(companyMapper.toEntity(companyRequest));
     }
 
     @PutMapping(value="/{id}")
-    public Company updateCompany(@PathVariable String id, @RequestBody Company company) throws NoCompanyFoundException {
-        return companyService.updateCompany(id, company);
+    public Company updateCompany(@PathVariable String id, @RequestBody CompanyRequest companyRequest) throws NoCompanyFoundException {
+        return companyService.updateCompany(id, companyMapper.toEntity(companyRequest));
     }
 
     @DeleteMapping(value = "/{id}")
