@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -49,8 +50,7 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$[0].id").isString())
                 .andExpect(jsonPath("$[0].name").value("Tom"))
                 .andExpect(jsonPath("$[0].age").value(20))
-                .andExpect(jsonPath("$[0].gender").value("male"))
-                .andExpect(jsonPath("$[0].salary").value(10000));
+                .andExpect(jsonPath("$[0].gender").value("male"));
 
     }
 
@@ -75,8 +75,7 @@ public class EmployeeControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Lily1"))
                 .andExpect(jsonPath("$.age").value(20))
-                .andExpect(jsonPath("$.gender").value("Female"))
-                .andExpect(jsonPath("$.salary").value(8000));
+                .andExpect(jsonPath("$.gender").value("Female"));
 
     }
 
@@ -172,8 +171,7 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.id").isString())
                 .andExpect(jsonPath("$.name").value("Tom"))
                 .andExpect(jsonPath("$.age").value(50))
-                .andExpect(jsonPath("$.gender").value("male"))
-                .andExpect(jsonPath("$.salary").value(8000));
+                .andExpect(jsonPath("$.gender").value("male"));
 
     }
 
