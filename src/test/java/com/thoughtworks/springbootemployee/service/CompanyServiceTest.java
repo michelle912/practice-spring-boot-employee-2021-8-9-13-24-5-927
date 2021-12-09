@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.entity.Employee;
+import com.thoughtworks.springbootemployee.exception.NoCompanyFoundException;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
@@ -16,11 +17,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 public class CompanyServiceTest {
@@ -58,6 +57,21 @@ public class CompanyServiceTest {
     }
 
     @Test
+    public void should_return_empty_list_when_getAllCompanies_given_no_companies() throws Exception {
+        // given
+
+        // when
+        doReturn(Collections.emptyList()).when(companyRepository).findAll();
+
+        List<Company> actual = companyService.getAllCompanies();
+
+        // then
+        assertTrue(actual.isEmpty());
+
+    }
+
+
+    @Test
     public void should_return_correct_companies_when_getAllCompanies_given_id() throws Exception {
         // given
         Integer id = 1;
@@ -75,6 +89,21 @@ public class CompanyServiceTest {
                 () -> assertEquals(company.getEmployees().size(), actual.getEmployees().size()),
                 () -> assertEquals(company.getEmployees().get(0), actual.getEmployees().get(0))
         );
+
+    }
+
+    @Test
+    public void should_throw_exception_when_getAllCompanies_given_company_not_exist() throws Exception {
+        // given
+        Integer id = 1;
+        Company company = new Company(id, "spring");
+        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000, id)));
+
+        // when
+        doThrow(NoCompanyFoundException.class).when(companyRepository).findById(id);
+
+        // then
+        assertThrows(NoCompanyFoundException.class, () -> companyService.getCompany(id));
 
     }
 
@@ -126,6 +155,21 @@ public class CompanyServiceTest {
     }
 
     @Test
+    public void should_return_empty_list_when_getCompanyByPage_given_invalid_page_and_pageSize() throws Exception {
+        // given
+        Integer invalidPage = 1;
+        Integer pageSize = 2;
+
+        // when
+        doReturn(Collections.emptyList()).when(companyRepository).findByPage(invalidPage, pageSize);
+
+        List<Company> actual = companyService.getCompanyByPageAndPageSize(invalidPage, pageSize);
+
+        // then
+        assertTrue(actual.isEmpty());
+    }
+
+    @Test
     public void should_create_company_when_createCompany_given_company() throws Exception {
         // given
         Company incomingCompany = new Company(1, "spring");
@@ -166,6 +210,23 @@ public class CompanyServiceTest {
     }
 
     @Test
+    public void should_throw_exception_when_updateCompany_given_company_not_exist() throws Exception {
+        // given
+        Integer id = 1;
+        String newName = "spring2";
+        Company input = new Company(id, newName);
+        input.setId(null);
+
+
+        // when
+        doThrow(NoCompanyFoundException.class).when(companyRepository).findById(id);
+
+        // then
+        assertThrows(NoCompanyFoundException.class, () -> companyService.updateCompany(id, input));
+
+    }
+
+    @Test
     public void should_delete_company_with_id_when_deleteCompanyById_given_id() throws Exception {
         // given
         Integer id = 1;
@@ -176,6 +237,21 @@ public class CompanyServiceTest {
 
         // then
         Mockito.verify(companyRepository, times(1)).deleteById(id);
+
+    }
+
+    @Test
+    public void should_throw_exception_when_deleteCompanyById_given_company_not_exist() throws Exception {
+        // given
+        Integer id = 1;
+        Company company = new Company(id, "spring");
+
+        // when
+        doThrow(NoCompanyFoundException.class).when(companyRepository).deleteById(id);
+
+
+        // then
+        assertThrows(NoCompanyFoundException.class, () -> companyService.deleteCompany(id));
 
     }
 
