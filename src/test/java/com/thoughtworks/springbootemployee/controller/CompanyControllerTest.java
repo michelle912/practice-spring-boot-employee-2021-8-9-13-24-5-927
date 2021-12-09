@@ -3,6 +3,8 @@ package com.thoughtworks.springbootemployee.controller;
 import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepositoryNew;
 import com.thoughtworks.springbootemployee.service.CompanyService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +33,9 @@ public class CompanyControllerTest {
     private CompanyRepository companyRepository;
 
     @Autowired
+    private EmployeeRepositoryNew employeeRepository;
+
+    @Autowired
     private CompanyService companyService;
 
     @BeforeEach
@@ -47,7 +52,7 @@ public class CompanyControllerTest {
     public void should_get_all_companies_when_getAllCompanies_given_companies() throws Exception {
         // given
         Company company = new Company("1", "spring");
-        company.setEmployees(Collections.singletonList(new Employee("1", "Lily1", 20, "Female", 8000,"1")));
+        employeeRepository.save(new Employee("1", "Lily1", 20, "Female", 8000,"1"));
         companyRepository.create(company);
 
         // when
@@ -57,11 +62,7 @@ public class CompanyControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$",hasSize(1)))
                 .andExpect(jsonPath("$[0].id").isString())
-                .andExpect(jsonPath("$[0].name").value("spring"))
-                .andExpect(jsonPath("$[0].employees", hasSize(1)))
-                .andExpect(jsonPath("$[0].employees[0].name").value("Lily1"))
-                .andExpect(jsonPath("$[0].employees[0].age").value(20))
-                .andExpect(jsonPath("$[0].employees[0].gender").value("Female"));
+                .andExpect(jsonPath("$[0].name").value("spring"));
 
     }
 
@@ -146,8 +147,7 @@ public class CompanyControllerTest {
         mockMvc.perform((MockMvcRequestBuilders.get("/companies").param("page", "1")).param("pageSize" , "2"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$",hasSize(1)))
-                .andExpect(jsonPath("$[0].id").value(3))
-                .andExpect(jsonPath("$[0].employees" , hasSize(1)));
+                .andExpect(jsonPath("$[0].id").value(3));
 
     }
 

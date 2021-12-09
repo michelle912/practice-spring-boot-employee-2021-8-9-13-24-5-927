@@ -3,18 +3,19 @@ package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.exception.NoEmployeeFoundException;
-import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepositoryNew;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -24,10 +25,11 @@ import static org.mockito.Mockito.*;
 public class EmployeeServiceTest {
 
     @Mock
-    EmployeeRepository employeeRepository;
+    EmployeeRepositoryNew employeeRepository;
 
     @InjectMocks
     EmployeeService employeeService;
+
 
     @Test
     public void should_get_all_employees_when_getAllEmployees_given_employees() {
@@ -65,10 +67,8 @@ public class EmployeeServiceTest {
         Employee updatedEmployee = new Employee("1", "Tom", 50, "male", 8000,"1");
 
         // when
-        doReturn(employee).when(employeeRepository).findById(id);
-        employee.setAge(50);
-        employee.setSalary(8000);
-        doReturn(employee).when(employeeRepository).save(any(Employee.class));
+        doReturn(Optional.of(employee)).when(employeeRepository).findById(id);
+        doReturn(updatedEmployee).when(employeeRepository).save(any(Employee.class));
 
         Employee actual = employeeService.updateEmployee(id, employee);
 
@@ -91,7 +91,7 @@ public class EmployeeServiceTest {
         Employee employee = new Employee("1", "Tom", 20, "male", 10000,"1");
 
         // when
-        doThrow(NoEmployeeFoundException.class).when(employeeRepository).findById(id);
+        doReturn(Optional.empty()).when(employeeRepository).findById(id);
 
         // then
         assertThrows(NoEmployeeFoundException.class, () -> employeeService.updateEmployee(id, employee));
@@ -106,7 +106,7 @@ public class EmployeeServiceTest {
         Employee employee = new Employee(id, "Tom", 20, "male", 10000,"1");
 
         // when
-        doReturn(employee).when(employeeRepository).findById(id);
+        doReturn(Optional.of(employee)).when(employeeRepository).findById(id);
         Employee actual = employeeService.getEmployee(id);
 
         // then
@@ -121,27 +121,13 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void should_throw_exception_when_get_employee_by_id_given_not_exist() throws Exception{
-        // given
-        String id = "1";
-        Employee employee = new Employee(id, "Tom", 20, "male", 10000,"1");
-
-        // when
-        doThrow(NoEmployeeFoundException.class).when(employeeRepository).findById(id);
-
-        // then
-        assertThrows(NoEmployeeFoundException.class, () -> employeeService.getEmployee(id));
-
-    }
-
-    @Test
     public void should_get_correct_employee_with_gender_when_get_employee_by_gender_given_gender() {
         // given
         String gender = "male";
         Employee employee = new Employee("1", "Tom", 20, gender, 10000,"1");
 
         // when
-        doReturn(Arrays.asList(employee)).when(employeeRepository).findByGender(gender);
+        doReturn(Arrays.asList(employee)).when(employeeRepository).findAllByGender(gender);
 
         List<Employee> actual = employeeService.getEmployeeWithGender(gender);
 
@@ -164,7 +150,7 @@ public class EmployeeServiceTest {
         Employee employee = new Employee("1", "Tom", 20, gender, 10000,"1");
 
         // when
-        doReturn(Collections.emptyList()).when(employeeRepository).findByGender(gender);
+        doReturn(Collections.emptyList()).when(employeeRepository).findAllByGender(gender);
 
         List<Employee> actual = employeeService.getEmployeeWithGender(gender);
 
@@ -181,9 +167,11 @@ public class EmployeeServiceTest {
         Employee employee3 = new Employee("3", "Tom3", 20, "male", 10000,"1");
         Employee employee4 = new Employee("4", "Tom4", 20, "male", 10000,"1");
         List<Employee> employeeList = Arrays.asList(employee3, employee4);
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
+        Page<Employee> employeePage = new PageImpl<>(employeeList);
 
         // when
-        doReturn(employeeList).when(employeeRepository).findByPage(page, pageSize);
+        doReturn(employeePage).when(employeeRepository).findAll(pageRequest);
 
         List<Employee> actual = employeeService.getEmployeeFromPageAndPageSize(page, pageSize);
 
@@ -209,9 +197,10 @@ public class EmployeeServiceTest {
         // given
         Integer page = 1;
         Integer pageSize = 2;
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
 
         // when
-        doReturn(Collections.emptyList()).when(employeeRepository).findByPage(page, pageSize);
+        doReturn(Page.empty()).when(employeeRepository).findAll(pageRequest);
 
         List<Employee> actual = employeeService.getEmployeeFromPageAndPageSize(page, pageSize);
 
@@ -229,7 +218,7 @@ public class EmployeeServiceTest {
 
 
         // when
-        doReturn(createdEmployee).when(employeeRepository).create(employee);
+        doReturn(createdEmployee).when(employeeRepository).save(employee);
 
         Employee actual = employeeService.createEmployee(employee);
 
@@ -254,20 +243,6 @@ public class EmployeeServiceTest {
 
         // then
         Mockito.verify(employeeRepository, times(1)).deleteById(id);
-
-
-    }
-
-    @Test
-    public void should_throw_exception_when_delete_given_employee_not_exist() throws Exception {
-        // given
-        String id = "1";
-
-        // when
-        doThrow(NoEmployeeFoundException.class).when(employeeRepository).deleteById(id);
-
-        // then
-        assertThrows(NoEmployeeFoundException.class, () -> employeeService.deleteEmployee(id));
 
 
     }

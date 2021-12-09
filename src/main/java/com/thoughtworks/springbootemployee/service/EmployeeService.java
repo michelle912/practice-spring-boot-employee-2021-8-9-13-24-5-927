@@ -3,7 +3,9 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.exception.NoEmployeeFoundException;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepositoryNew;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,17 +14,19 @@ import java.util.List;
 public class EmployeeService {
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private EmployeeRepositoryNew employeeRepositoryNew;
 
 
     public List<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
+        return employeeRepositoryNew.findAll();
     }
 
     public Employee updateEmployee(String id, Employee employee) throws NoEmployeeFoundException {
-        Employee existingRecord = employeeRepository.findById(id);
+        Employee existingRecord = employeeRepositoryNew
+                .findById(id)
+                .orElseThrow(() -> new NoEmployeeFoundException("Not Found."));
 
-        if (existingRecord == null || employee == null) {
+        if (employee == null) {
             return null;
         }
 
@@ -33,27 +37,28 @@ public class EmployeeService {
         if(employee.getAge() != null) {
             existingRecord.setAge(employee.getAge());
         }
-        return employeeRepository.save(existingRecord);
+        return employeeRepositoryNew.save(existingRecord);
     }
 
     public Employee getEmployee(String id) throws NoEmployeeFoundException {
-        return employeeRepository.findById(id);
+        return employeeRepositoryNew.findById(id)
+                .orElseThrow(() -> new NoEmployeeFoundException("Not Found."));
     }
 
     public List<Employee> getEmployeeWithGender(String gender) {
-        return employeeRepository.findByGender(gender);
+        return employeeRepositoryNew.findAllByGender(gender);
     }
 
     public List<Employee> getEmployeeFromPageAndPageSize(Integer page, Integer pageSize) {
-        return employeeRepository.findByPage(page, pageSize);
+        return employeeRepositoryNew.findAll(PageRequest.of(page, pageSize)).getContent();
     }
 
     public Employee createEmployee(Employee employee) {
-        return employeeRepository.create(employee);
+        return employeeRepositoryNew.save(employee);
     }
 
 
-    public void deleteEmployee(String id) throws NoEmployeeFoundException {
-        employeeRepository.deleteById(id);
+    public void deleteEmployee(String id) {
+        employeeRepositoryNew.deleteById(id);
     }
 }

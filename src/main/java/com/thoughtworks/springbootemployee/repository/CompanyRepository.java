@@ -14,7 +14,7 @@ public class CompanyRepository {
     private List<Company> companyList;
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private EmployeeRepositoryNew employeeRepository;
 
     public CompanyRepository() {
         this.companyList = new ArrayList<>();
@@ -37,7 +37,7 @@ public class CompanyRepository {
                 .findFirst()
                 .orElseThrow(() -> new NoCompanyFoundException("Company Not Found."));
 
-        existingCompany.setEmployees(employeeRepository.aggregateByCompanyId(existingCompany.getId()));
+        existingCompany.setEmployees(employeeRepository.findAllByCompanyId(existingCompany.getId()));
         return existingCompany;
     }
 
@@ -51,7 +51,7 @@ public class CompanyRepository {
             throw new NoCompanyFoundException("Company Not Found");
         }
 
-        existingCompanyList.forEach(company -> company.setEmployees(employeeRepository.aggregateByCompanyId(company.getId())));
+        existingCompanyList.forEach(company -> company.setEmployees(employeeRepository.findAllByCompanyId(company.getId())));
 
         return existingCompanyList;
     }
