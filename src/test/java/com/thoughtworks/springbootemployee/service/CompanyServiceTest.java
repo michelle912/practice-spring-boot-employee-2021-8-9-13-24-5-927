@@ -12,11 +12,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.swing.text.html.Option;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -77,7 +82,7 @@ public class CompanyServiceTest {
         company.setEmployees(Collections.singletonList(new Employee("1", "Lily1", 20, "Female", 8000, id)));
 
         // when
-        doReturn(company).when(companyRepository).findById(id);
+        doReturn(Optional.of(company)).when(companyRepository).findById(id);
         Company actual = companyService.getCompany(id);
 
         // then
@@ -98,7 +103,7 @@ public class CompanyServiceTest {
         company.setEmployees(Collections.singletonList(new Employee("1", "Lily1", 20, "Female", 8000, id)));
 
         // when
-        doThrow(NoCompanyFoundException.class).when(companyRepository).findById(id);
+        doReturn(Optional.empty()).when(companyRepository).findById(id);
 
         // then
         assertThrows(NoCompanyFoundException.class, () -> companyService.getCompany(id));
@@ -139,9 +144,10 @@ public class CompanyServiceTest {
         Company company2 = new Company("2", "spring2");
         Company company3 = new Company("3", "spring3");
         List<Company> companyList = Arrays.asList(company1,company2, company3);
+        Page<Company> companyPage = new PageImpl<>(Arrays.asList(company3));
 
         // when
-        doReturn(Arrays.asList(company3)).when(companyRepository).findByPage(page, pageSize);
+        doReturn(companyPage).when(companyRepository).findAll(PageRequest.of(page, pageSize));
 
         List<Company> actual = companyService.getCompanyByPageAndPageSize(page, pageSize);
 
@@ -159,7 +165,7 @@ public class CompanyServiceTest {
         Integer pageSize = 2;
 
         // when
-        doReturn(Collections.emptyList()).when(companyRepository).findByPage(invalidPage, pageSize);
+        doReturn(Page.empty()).when(companyRepository).findAll(PageRequest.of(invalidPage, pageSize));
 
         List<Company> actual = companyService.getCompanyByPageAndPageSize(invalidPage, pageSize);
 
@@ -175,7 +181,7 @@ public class CompanyServiceTest {
         Company company = new Company("1", "spring");
 
         // when
-        doReturn(company).when(companyRepository).create(incomingCompany);
+        doReturn(company).when(companyRepository).save(incomingCompany);
 
         Company actual = companyService.createCompany(incomingCompany);
 
@@ -197,9 +203,8 @@ public class CompanyServiceTest {
 
 
         // when
-        doReturn(existingCompany).when(companyRepository).findById(id);
-        existingCompany.setName(newName);
-        doReturn(existingCompany).when(companyRepository).save(any(Company.class));
+        doReturn(Optional.of(existingCompany)).when(companyRepository).findById(id);
+        doReturn(updatedCompany).when(companyRepository).save(any(Company.class));
 
         Company actual = companyService.updateCompany(id, input);
 
@@ -218,7 +223,7 @@ public class CompanyServiceTest {
 
 
         // when
-        doThrow(NoCompanyFoundException.class).when(companyRepository).findById(id);
+        doReturn(Optional.empty()).when(companyRepository).findById(id);
 
         // then
         assertThrows(NoCompanyFoundException.class, () -> companyService.updateCompany(id, input));
@@ -239,19 +244,5 @@ public class CompanyServiceTest {
 
     }
 
-    @Test
-    public void should_throw_exception_when_deleteCompanyById_given_company_not_exist() throws Exception {
-        // given
-        String id = "1";
-        Company company = new Company(id, "spring");
-
-        // when
-        doThrow(NoCompanyFoundException.class).when(companyRepository).deleteById(id);
-
-
-        // then
-        assertThrows(NoCompanyFoundException.class, () -> companyService.deleteCompany(id));
-
-    }
 
 }

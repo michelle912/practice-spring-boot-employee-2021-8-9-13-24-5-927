@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.entity.Employee;
+import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.CompanyRepositoryOld;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import com.thoughtworks.springbootemployee.service.CompanyService;
@@ -27,7 +28,7 @@ public class CompanyControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private CompanyRepositoryOld companyRepository;
+    private CompanyRepository companyRepository;
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -37,13 +38,13 @@ public class CompanyControllerTest {
 
     @BeforeEach
     void setUp() {
-        companyRepository.clearAll();
+        companyRepository.deleteAll();
         employeeRepository.deleteAll();
     }
 
     @AfterEach
     void cleanUp() {
-        companyRepository.clearAll();
+        companyRepository.deleteAll();
     }
 
     @Test
@@ -51,7 +52,7 @@ public class CompanyControllerTest {
         // given
         Company company = new Company("1", "spring");
         employeeRepository.save(new Employee("1", "Lily1", 20, "Female", 8000,"1"));
-        companyRepository.create(company);
+        companyRepository.save(company);
 
         // when
 
@@ -69,7 +70,7 @@ public class CompanyControllerTest {
         // given
         Company company = new Company("1", "spring");
         employeeRepository.save(new Employee("1", "Lily1", 20, "Female", 8000, "1"));
-        companyRepository.create(company);
+        companyRepository.save(company);
 
         // when
 
@@ -77,11 +78,7 @@ public class CompanyControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/companies/{id}" , company.getId()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.id").isString())
-                .andExpect(jsonPath("$.name").value("spring"))
-                .andExpect(jsonPath("$.employees", hasSize(1)))
-                .andExpect(jsonPath("$.employees[0].name").value("Lily1"))
-                .andExpect(jsonPath("$.employees[0].age").value(20))
-                .andExpect(jsonPath("$.employees[0].gender").value("Female"));
+                .andExpect(jsonPath("$.name").value("spring"));
 
     }
 
@@ -90,7 +87,7 @@ public class CompanyControllerTest {
         // given
         Company company = new Company("1", "spring");
         employeeRepository.save(new Employee("1", "Lily1", 20, "Female", 8000, "1"));
-        companyRepository.create(company);
+        companyRepository.save(company);
 
         // when
 
@@ -111,7 +108,7 @@ public class CompanyControllerTest {
         // given
         Company company = new Company("1", "spring");
         employeeRepository.save(new Employee("1", "Lily1", 20, "Female", 8000,"1"));
-        companyRepository.create(company);
+        companyRepository.save(company);
 
         // when
 
@@ -131,13 +128,13 @@ public class CompanyControllerTest {
         // given
         Company company1 = new Company("1", "spring");
         employeeRepository.save(new Employee("1", "Lily1", 20, "Female", 8000, "1"));
-        companyRepository.create(company1);
+        companyRepository.save(company1);
 
         Company company2 = new Company("2", "spring2");
         Company company3 = new Company("3", "spring3");
 
-        companyRepository.create(company2);
-        companyRepository.create(company3);
+        companyRepository.save(company2);
+        companyRepository.save(company3);
 
         // when
 
@@ -174,7 +171,7 @@ public class CompanyControllerTest {
         // given
         Company company1 = new Company("1", "spring");
         employeeRepository.save(new Employee("1", "Lily1", 20, "Female", 8000, "1"));
-        companyRepository.create(company1);
+        companyRepository.save(company1);
 
         String newCompany = "{\n" +
                 "        \"name\": \"new spring\"\n" +
@@ -197,7 +194,7 @@ public class CompanyControllerTest {
         // given
         Company company = new Company("1", "spring");
         employeeRepository.save(new Employee("1", "Lily1", 20, "Female", 8000, "1"));
-        companyRepository.create(company);
+        companyRepository.save(company);
 
         // when
 
