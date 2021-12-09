@@ -2,9 +2,8 @@ package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.entity.Employee;
-import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import com.thoughtworks.springbootemployee.repository.CompanyRepositoryOld;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
-import com.thoughtworks.springbootemployee.repository.EmployeeRepositoryNew;
 import com.thoughtworks.springbootemployee.service.CompanyService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.Collections;
-
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -30,10 +27,10 @@ public class CompanyControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private CompanyRepository companyRepository;
+    private CompanyRepositoryOld companyRepository;
 
     @Autowired
-    private EmployeeRepositoryNew employeeRepository;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
     private CompanyService companyService;
@@ -41,6 +38,7 @@ public class CompanyControllerTest {
     @BeforeEach
     void setUp() {
         companyRepository.clearAll();
+        employeeRepository.deleteAll();
     }
 
     @AfterEach
@@ -70,7 +68,7 @@ public class CompanyControllerTest {
     public void should_return_correct_companies_when_getAllCompanies_given_id() throws Exception {
         // given
         Company company = new Company("1", "spring");
-        company.setEmployees(Collections.singletonList(new Employee("1", "Lily1", 20, "Female", 8000, "1")));
+        employeeRepository.save(new Employee("1", "Lily1", 20, "Female", 8000, "1"));
         companyRepository.create(company);
 
         // when
@@ -91,7 +89,7 @@ public class CompanyControllerTest {
     public void should_get_all_employees_under_company_when_getAllEmployeesByCompanyId_given_id() throws Exception {
         // given
         Company company = new Company("1", "spring");
-        company.setEmployees(Collections.singletonList(new Employee("1", "Lily1", 20, "Female", 8000,"1")));
+        employeeRepository.save(new Employee("1", "Lily1", 20, "Female", 8000, "1"));
         companyRepository.create(company);
 
         // when
@@ -112,7 +110,7 @@ public class CompanyControllerTest {
     public void should_company_in_page_when_getAllEmployeesByCompanyId_given_id() throws Exception {
         // given
         Company company = new Company("1", "spring");
-        company.setEmployees(Collections.singletonList(new Employee("1", "Lily1", 20, "Female", 8000,"1")));
+        employeeRepository.save(new Employee("1", "Lily1", 20, "Female", 8000,"1"));
         companyRepository.create(company);
 
         // when
@@ -132,7 +130,7 @@ public class CompanyControllerTest {
     public void should_comapny_in_page_under_company_when_getAllCompanyByPage_given_page_pageSize() throws Exception {
         // given
         Company company1 = new Company("1", "spring");
-        company1.setEmployees(Collections.singletonList(new Employee("1", "Lily1", 20, "Female", 8000,"1")));
+        employeeRepository.save(new Employee("1", "Lily1", 20, "Female", 8000, "1"));
         companyRepository.create(company1);
 
         Company company2 = new Company("2", "spring2");
@@ -175,7 +173,7 @@ public class CompanyControllerTest {
     public void should_update_comapny_when_updateCompany_given_company() throws Exception {
         // given
         Company company1 = new Company("1", "spring");
-        company1.setEmployees(Collections.singletonList(new Employee("1", "Lily1", 20, "Female", 8000,"1")));
+        employeeRepository.save(new Employee("1", "Lily1", 20, "Female", 8000, "1"));
         companyRepository.create(company1);
 
         String newCompany = "{\n" +
@@ -198,7 +196,7 @@ public class CompanyControllerTest {
     public void should_delete_company_with_id_when_deleteCompanyById_given_id() throws Exception {
         // given
         Company company = new Company("1", "spring");
-        company.setEmployees(Collections.singletonList(new Employee("1", "Lily1", 20, "Female", 8000,"1")));
+        employeeRepository.save(new Employee("1", "Lily1", 20, "Female", 8000, "1"));
         companyRepository.create(company);
 
         // when

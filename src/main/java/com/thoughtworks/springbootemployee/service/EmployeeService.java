@@ -3,7 +3,6 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.exception.NoEmployeeFoundException;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
-import com.thoughtworks.springbootemployee.repository.EmployeeRepositoryNew;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,7 @@ import java.util.List;
 public class EmployeeService {
 
     @Autowired
-    private EmployeeRepositoryNew employeeRepositoryNew;
+    private EmployeeRepository employeeRepositoryNew;
 
 
     public List<Employee> getAllEmployees() {

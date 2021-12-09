@@ -4,8 +4,10 @@ import com.thoughtworks.springbootemployee.entity.Employee;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,8 +18,7 @@ public class EmployeeRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        employeeRepository = new EmployeeRepository();
-        employeeRepository.clearAll();
+        employeeRepository.deleteAll();
     }
 
     @Test
@@ -25,13 +26,13 @@ public class EmployeeRepositoryTest {
         // given
         String id = "1";
         Employee employee = new Employee(id, "Tom", 20, "male", 10000,"1");
-        employeeRepository.create(employee);
+        employeeRepository.save(employee);
 
         // when
-        Employee actual = employeeRepository.findById(id);
+        Optional<Employee> actual = employeeRepository.findById(id);
 
         // then
-        assertEquals(employee, actual);
+        assertEquals(employee, actual.get());
     }
 
     @Test
@@ -39,7 +40,7 @@ public class EmployeeRepositoryTest {
         // given
         String id = "1";
         Employee employee = new Employee(id, "Tom", 20, "male", 10000,"1");
-        employeeRepository.create(employee);
+        employeeRepository.save(employee);
 
         // when
         List<Employee> actual = employeeRepository.findAll();
@@ -56,10 +57,10 @@ public class EmployeeRepositoryTest {
         // given
         String gender = "male";
         Employee employee = new Employee("1", "Tom", 20, gender, 10000,"1");
-        employeeRepository.create(employee);
+        employeeRepository.save(employee);
 
         // when
-        List<Employee> actual = employeeRepository.findByGender(gender);
+        List<Employee> actual = employeeRepository.findAllByGender(gender);
 
         // then
         assertAll(
@@ -78,13 +79,15 @@ public class EmployeeRepositoryTest {
         Employee employee3 = new Employee("3", "Tom3", 20, "male", 10000,"1");
         Employee employee4 = new Employee("4", "Tom4", 20, "male", 10000,"1");
 
-        employeeRepository.create(employee1);
-        employeeRepository.create(employee2);
-        employeeRepository.create(employee3);
-        employeeRepository.create(employee4);
+        employeeRepository.save(employee1);
+        employeeRepository.save(employee2);
+        employeeRepository.save(employee3);
+        employeeRepository.save(employee4);
+
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
 
         // when
-        List<Employee> actual = employeeRepository.findByPage(page, pageSize);
+        List<Employee> actual = employeeRepository.findAll(pageRequest).getContent();
 
         // then
         assertAll(
@@ -95,23 +98,23 @@ public class EmployeeRepositoryTest {
     }
 
     @Test
-    public void should_create_employees_when_creategiven_employee() throws Exception {
+    public void should_create_employees_when_create_given_employee() throws Exception {
         // given
         Employee employee1 = new Employee("1", "Tom1", 20, "male", 10000,"1");
         employee1.setId(null);
 
         // when
-        employeeRepository.create(employee1);
-        Employee actual = employeeRepository.findById("1");
+        employeeRepository.save(employee1);
+        Optional<Employee> actual = employeeRepository.findById("1");
 
         // then
         assertAll(
-                () -> assertNotNull(actual.getId()),
-                () -> assertEquals(employee1.getName(), actual.getName()),
-                () -> assertEquals(employee1.getGender(), actual.getGender()),
-                () -> assertEquals(employee1.getAge(), actual.getAge()),
-                () -> assertEquals(employee1.getSalary(), actual.getSalary()),
-                () -> assertEquals(employee1.getCompanyId(), actual.getCompanyId())
+                () -> assertNotNull(actual.get().getId()),
+                () -> assertEquals(employee1.getName(), actual.get().getName()),
+                () -> assertEquals(employee1.getGender(), actual.get().getGender()),
+                () -> assertEquals(employee1.getAge(), actual.get().getAge()),
+                () -> assertEquals(employee1.getSalary(), actual.get().getSalary()),
+                () -> assertEquals(employee1.getCompanyId(), actual.get().getCompanyId())
         );
     }
 
@@ -119,22 +122,22 @@ public class EmployeeRepositoryTest {
     public void should_save_employees_when_save_given_employee() throws Exception {
         // given
         Employee employee = new Employee("1", "Tom1", 20, "male", 10000,"1");
-        employeeRepository.create(employee);
+        employeeRepository.save(employee);
 
         Employee updatedEmployee = new Employee("1", "Tom2", 20, "male", 10000,"1");
 
         // when
         employeeRepository.save(updatedEmployee);
-        Employee actual = employeeRepository.findById("1");
+        Optional<Employee> actual = employeeRepository.findById("1");
 
         // then
         assertAll(
-                () -> assertNotNull(actual.getId()),
-                () -> assertEquals(updatedEmployee.getName(), actual.getName()),
-                () -> assertEquals(updatedEmployee.getGender(), actual.getGender()),
-                () -> assertEquals(updatedEmployee.getAge(), actual.getAge()),
-                () -> assertEquals(updatedEmployee.getSalary(), actual.getSalary()),
-                () -> assertEquals(updatedEmployee.getCompanyId(), actual.getCompanyId())
+                () -> assertNotNull(actual.get().getId()),
+                () -> assertEquals(updatedEmployee.getName(), actual.get().getName()),
+                () -> assertEquals(updatedEmployee.getGender(), actual.get().getGender()),
+                () -> assertEquals(updatedEmployee.getAge(), actual.get().getAge()),
+                () -> assertEquals(updatedEmployee.getSalary(), actual.get().getSalary()),
+                () -> assertEquals(updatedEmployee.getCompanyId(), actual.get().getCompanyId())
         );
     }
 
@@ -143,8 +146,8 @@ public class EmployeeRepositoryTest {
         // given
         Employee employee1 = new Employee("1", "Tom1", 20, "male", 10000, "1");
         Employee employee2 = new Employee("2", "Tom1", 20, "male", 10000, "1");
-        employeeRepository.create(employee1);
-        employeeRepository.create(employee2);
+        employeeRepository.save(employee1);
+        employeeRepository.save(employee2);
 
         // when
         employeeRepository.deleteById("1");
@@ -156,32 +159,15 @@ public class EmployeeRepositoryTest {
     }
 
     @Test
-    public void should_clear_all_employee_when_clearAll_given_employees_exist() throws Exception {
-        // given
-        Employee employee1 = new Employee("1", "Tom1", 20, "male", 10000, "1");
-        Employee employee2 = new Employee("2", "Tom1", 20, "male", 10000, "1");
-        employeeRepository.create(employee1);
-        employeeRepository.create(employee2);
-
-        // when
-        employeeRepository.clearAll();
-
-        List<Employee> actual = employeeRepository.findAll();
-
-        // then
-        assertTrue(actual.isEmpty());
-    }
-
-    @Test
     public void should_get_employee_with_company_id_when_aggregateByCompanyId_given_company_id() throws Exception {
         // given
         Employee employee1 = new Employee("1", "Tom1", 20, "male", 10000, "1");
         Employee employee2 = new Employee("2", "Tom1", 20, "male", 10000, "2");
-        employeeRepository.create(employee1);
-        employeeRepository.create(employee2);
+        employeeRepository.save(employee1);
+        employeeRepository.save(employee2);
 
         // when
-        List<Employee> actual = employeeRepository.aggregateByCompanyId("1");
+        List<Employee> actual = employeeRepository.findAllByCompanyId("1");
 
         // then
         assertAll(

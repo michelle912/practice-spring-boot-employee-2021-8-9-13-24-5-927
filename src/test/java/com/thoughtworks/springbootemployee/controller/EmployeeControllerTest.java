@@ -2,9 +2,7 @@ package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
-import com.thoughtworks.springbootemployee.repository.EmployeeRepositoryNew;
 import com.thoughtworks.springbootemployee.service.EmployeeService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -30,7 +28,7 @@ public class EmployeeControllerTest {
     MockMvc mockMvc;
 
     @Autowired
-    private EmployeeRepositoryNew employeeRepository;
+    private EmployeeRepository employeeRepository;
 
     @Autowired
     private EmployeeService employeeService;

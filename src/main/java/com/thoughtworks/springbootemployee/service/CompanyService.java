@@ -6,6 +6,7 @@ import com.thoughtworks.springbootemployee.exception.NoCompanyFoundException;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,24 +26,25 @@ public class CompanyService {
     }
 
     public Company getCompany(String id) throws NoCompanyFoundException {
-        return companyRepository.findById(id);
+        return companyRepository.findById(id)
+                .orElseThrow(() -> new NoCompanyFoundException("Not Found."));
     }
 
-    public List<Employee> getAllEmployeesUnderCompany(String id) throws NoCompanyFoundException {
-        companyRepository.findById(id);
-        return employeeRepository.aggregateByCompanyId(id);
+    public List<Employee> getAllEmployeesUnderCompany(String id) {
+        return employeeRepository.findAllByCompanyId(id);
     }
 
-    public List<Company> getCompanyByPageAndPageSize(Integer page, Integer pageSize) throws NoCompanyFoundException {
-        return companyRepository.findByPage(page, pageSize);
+    public List<Company> getCompanyByPageAndPageSize(Integer page, Integer pageSize)  {
+        return companyRepository.findAll(PageRequest.of(page, pageSize)).getContent();
     }
 
     public Company createCompany(Company company) {
-        return companyRepository.create(company);
+        return companyRepository.save(company);
     }
 
     public Company updateCompany(String id, Company company) throws NoCompanyFoundException {
-        Company existingRecord = companyRepository.findById(id);
+        Company existingRecord = companyRepository.findById(id)
+                .orElseThrow(() -> new NoCompanyFoundException("Not Found."));
 
         if (company == null) {
             return null;
@@ -54,7 +56,7 @@ public class CompanyService {
         return companyRepository.save(existingRecord);
     }
 
-    public void deleteCompany(String id) throws NoCompanyFoundException {
+    public void deleteCompany(String id){
         companyRepository.deleteById(id);
     }
 }
