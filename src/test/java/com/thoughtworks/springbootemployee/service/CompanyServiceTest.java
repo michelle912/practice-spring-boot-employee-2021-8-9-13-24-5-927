@@ -36,8 +36,8 @@ public class CompanyServiceTest {
     @Test
     public void should_get_all_companies_when_getAllCompanies_given_companies() throws Exception {
         // given
-        Company company = new Company(1, "spring");
-        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000,1)));
+        Company company = new Company("1", "spring");
+        company.setEmployees(Collections.singletonList(new Employee("1", "Lily1", 20, "Female", 8000,"1")));
         List<Company> companyList = Arrays.asList(company);
 
         // when
@@ -72,11 +72,11 @@ public class CompanyServiceTest {
 
 
     @Test
-    public void should_return_correct_companies_when_getAllCompanies_given_id() throws Exception {
+    public void should_return_correct_companies_when_getCompany_given_id() throws Exception {
         // given
-        Integer id = 1;
+        String id = "1";
         Company company = new Company(id, "spring");
-        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000, id)));
+        company.setEmployees(Collections.singletonList(new Employee("1", "Lily1", 20, "Female", 8000, id)));
 
         // when
         doReturn(company).when(companyRepository).findById(id);
@@ -93,11 +93,11 @@ public class CompanyServiceTest {
     }
 
     @Test
-    public void should_throw_exception_when_getAllCompanies_given_company_not_exist() throws Exception {
+    public void should_throw_exception_when_getCompany_given_company_not_exist() throws Exception {
         // given
-        Integer id = 1;
+        String id = "1";
         Company company = new Company(id, "spring");
-        company.setEmployees(Collections.singletonList(new Employee(1, "Lily1", 20, "Female", 8000, id)));
+        company.setEmployees(Collections.singletonList(new Employee("1", "Lily1", 20, "Female", 8000, id)));
 
         // when
         doThrow(NoCompanyFoundException.class).when(companyRepository).findById(id);
@@ -110,11 +110,11 @@ public class CompanyServiceTest {
     @Test
     public void should_get_all_employees_under_company_when_getAllEmployeesByCompanyId_given_id() throws Exception {
         // given
-        Integer companyId1 = 1;
-        Integer companyId2 = 2;
+        String companyId1 = "1";
+        String companyId2 = "2";
         Company company = new Company(companyId1, "spring");
-        Employee employee1 = new Employee(1, "Lily1", 20, "Female", 8000,companyId1);
-        Employee employee2 = new Employee(2, "Lily2", 20, "Female", 8000,companyId2);
+        Employee employee1 = new Employee("1", "Lily1", 20, "Female", 8000,companyId1);
+        Employee employee2 = new Employee("2", "Lily2", 20, "Female", 8000,companyId2);
         List<Employee> employeeList = Arrays.asList(employee1, employee2);
 
         company.setEmployees(employeeList);
@@ -137,9 +137,9 @@ public class CompanyServiceTest {
         // given
         Integer page = 1;
         Integer pageSize = 2;
-        Company company1 = new Company(1, "spring");
-        Company company2 = new Company(2, "spring2");
-        Company company3 = new Company(3, "spring3");
+        Company company1 = new Company("1", "spring");
+        Company company2 = new Company("2", "spring2");
+        Company company3 = new Company("3", "spring3");
         List<Company> companyList = Arrays.asList(company1,company2, company3);
 
         // when
@@ -172,9 +172,9 @@ public class CompanyServiceTest {
     @Test
     public void should_create_company_when_createCompany_given_company() throws Exception {
         // given
-        Company incomingCompany = new Company(1, "spring");
+        Company incomingCompany = new Company("1", "spring");
         incomingCompany.setId(null);
-        Company company = new Company(1, "spring");
+        Company company = new Company("1", "spring");
 
         // when
         doReturn(company).when(companyRepository).create(incomingCompany);
@@ -186,10 +186,11 @@ public class CompanyServiceTest {
 
     }
 
+    // TODO: UpdatedCompany directly, input name refactor
     @Test
     public void should_update_company_when_updateCompany_given_company() throws Exception {
         // given
-        Integer id = 1;
+        String id = "1";
         String newName = "spring2";
         Company existingCompany = new Company(id, "spring");
         Company input = new Company(id, newName);
@@ -212,7 +213,7 @@ public class CompanyServiceTest {
     @Test
     public void should_throw_exception_when_updateCompany_given_company_not_exist() throws Exception {
         // given
-        Integer id = 1;
+        String id = "1";
         String newName = "spring2";
         Company input = new Company(id, newName);
         input.setId(null);
@@ -229,7 +230,7 @@ public class CompanyServiceTest {
     @Test
     public void should_delete_company_with_id_when_deleteCompanyById_given_id() throws Exception {
         // given
-        Integer id = 1;
+        String id = "1";
         Company company = new Company(id, "spring");
 
         // when
@@ -243,7 +244,7 @@ public class CompanyServiceTest {
     @Test
     public void should_throw_exception_when_deleteCompanyById_given_company_not_exist() throws Exception {
         // given
-        Integer id = 1;
+        String id = "1";
         Company company = new Company(id, "spring");
 
         // when

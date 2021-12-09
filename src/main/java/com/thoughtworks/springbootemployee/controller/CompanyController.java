@@ -27,12 +27,12 @@ public class CompanyController {
     }
 
     @GetMapping(value="/{id}")
-    public Company getCompanyById(@PathVariable Integer id) throws NoCompanyFoundException {
+    public Company getCompanyById(@PathVariable String id) throws NoCompanyFoundException {
         return companyService.getCompany(id);
     }
 
     @GetMapping(value="/{id}/employees")
-    public List<Employee> getAllEmployeesByCompanyId(@PathVariable Integer id) throws NoCompanyFoundException {
+    public List<Employee> getAllEmployeesByCompanyId(@PathVariable String id) throws NoCompanyFoundException {
         return companyService.getAllEmployeesUnderCompany(id);
     }
 
@@ -48,13 +48,13 @@ public class CompanyController {
     }
 
     @PutMapping(value="/{id}")
-    public Company updateCompany(@PathVariable Integer id, @RequestBody Company company) throws NoCompanyFoundException {
+    public Company updateCompany(@PathVariable String id, @RequestBody Company company) throws NoCompanyFoundException {
         return companyService.updateCompany(id, company);
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCompanyById(@PathVariable Integer id) throws NoCompanyFoundException {
+    public void deleteCompanyById(@PathVariable String id) throws NoCompanyFoundException {
         companyService.deleteCompany(id);
     }
 }

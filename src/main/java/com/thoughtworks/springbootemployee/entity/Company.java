@@ -6,21 +6,21 @@ import java.util.List;
 import java.util.Objects;
 
 public class Company {
-    private Integer id;
+    private String id;
     private String companyName;
     private List<Employee> employees;
 
-    public Company(Integer id, String companyName) {
+    public Company(String id, String companyName) {
         this.id = id;
         this.companyName = companyName;
         this.employees = new ArrayList<>();
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -19,7 +19,7 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Employee updateEmployee(Integer id, Employee employee) throws NoEmployeeFoundException {
+    public Employee updateEmployee(String id, Employee employee) throws NoEmployeeFoundException {
         Employee existingRecord = employeeRepository.findById(id);
 
         if (existingRecord == null || employee == null) {
@@ -36,7 +36,7 @@ public class EmployeeService {
         return employeeRepository.save(existingRecord);
     }
 
-    public Employee getEmployee(Integer id) throws NoEmployeeFoundException {
+    public Employee getEmployee(String id) throws NoEmployeeFoundException {
         return employeeRepository.findById(id);
     }
 
@@ -53,7 +53,7 @@ public class EmployeeService {
     }
 
 
-    public void deleteEmployee(Integer id) throws NoEmployeeFoundException {
+    public void deleteEmployee(String id) throws NoEmployeeFoundException {
         employeeRepository.deleteById(id);
     }
 }

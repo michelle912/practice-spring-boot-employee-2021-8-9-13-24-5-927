@@ -33,7 +33,7 @@ public class EmployeeServiceTest {
     public void should_get_all_employees_when_getAllEmployees_given_employees() {
         // given
         List<Employee> employeeList = new ArrayList<>();
-        employeeList.add(new Employee(1, "Tom", 20, "male", 10000,1));
+        employeeList.add(new Employee("1", "Tom", 20, "male", 10000,"1"));
 
         // when
         doReturn(employeeList).when(employeeRepository).findAll();
@@ -60,9 +60,9 @@ public class EmployeeServiceTest {
     @Test
     public void should_update_employee_when_updateEmployee_given_id_and_employee() throws Exception{
         // given
-        Integer id = 1;
-        Employee employee = new Employee(1, "Tom", 20, "male", 10000,1);
-        Employee updatedEmployee = new Employee(1, "Tom", 50, "male", 8000,1);
+        String id = "1";
+        Employee employee = new Employee("1", "Tom", 20, "male", 10000,"1");
+        Employee updatedEmployee = new Employee("1", "Tom", 50, "male", 8000,"1");
 
         // when
         doReturn(employee).when(employeeRepository).findById(id);
@@ -87,8 +87,8 @@ public class EmployeeServiceTest {
     @Test
     public void should_throw_exception_when_updateEmployee_given_employee_not_exist() throws Exception{
         // given
-        Integer id = 1;
-        Employee employee = new Employee(1, "Tom", 20, "male", 10000,1);
+        String id = "1";
+        Employee employee = new Employee("1", "Tom", 20, "male", 10000,"1");
 
         // when
         doThrow(NoEmployeeFoundException.class).when(employeeRepository).findById(id);
@@ -102,8 +102,8 @@ public class EmployeeServiceTest {
     @Test
     public void should_get_correct_employee_when_get_employee_by_id_given_id() throws Exception{
         // given
-        Integer id = 1;
-        Employee employee = new Employee(id, "Tom", 20, "male", 10000,1);
+        String id = "1";
+        Employee employee = new Employee(id, "Tom", 20, "male", 10000,"1");
 
         // when
         doReturn(employee).when(employeeRepository).findById(id);
@@ -123,8 +123,8 @@ public class EmployeeServiceTest {
     @Test
     public void should_throw_exception_when_get_employee_by_id_given_not_exist() throws Exception{
         // given
-        Integer id = 1;
-        Employee employee = new Employee(id, "Tom", 20, "male", 10000,1);
+        String id = "1";
+        Employee employee = new Employee(id, "Tom", 20, "male", 10000,"1");
 
         // when
         doThrow(NoEmployeeFoundException.class).when(employeeRepository).findById(id);
@@ -138,7 +138,7 @@ public class EmployeeServiceTest {
     public void should_get_correct_employee_with_gender_when_get_employee_by_gender_given_gender() {
         // given
         String gender = "male";
-        Employee employee = new Employee(1, "Tom", 20, gender, 10000,1);
+        Employee employee = new Employee("1", "Tom", 20, gender, 10000,"1");
 
         // when
         doReturn(Arrays.asList(employee)).when(employeeRepository).findByGender(gender);
@@ -161,7 +161,7 @@ public class EmployeeServiceTest {
     public void should_return_empty_list_with_gender_when_get_employee_by_gender_given_no_record_exist() {
         // given
         String gender = "male";
-        Employee employee = new Employee(1, "Tom", 20, gender, 10000,1);
+        Employee employee = new Employee("1", "Tom", 20, gender, 10000,"1");
 
         // when
         doReturn(Collections.emptyList()).when(employeeRepository).findByGender(gender);
@@ -178,8 +178,8 @@ public class EmployeeServiceTest {
         // given
         Integer page = 1;
         Integer pageSize = 2;
-        Employee employee3 = new Employee(3, "Tom3", 20, "male", 10000,1);
-        Employee employee4 = new Employee(4, "Tom4", 20, "male", 10000,1);
+        Employee employee3 = new Employee("3", "Tom3", 20, "male", 10000,"1");
+        Employee employee4 = new Employee("4", "Tom4", 20, "male", 10000,"1");
         List<Employee> employeeList = Arrays.asList(employee3, employee4);
 
         // when
@@ -223,9 +223,9 @@ public class EmployeeServiceTest {
     @Test
     public void should_return_employee_when_create_given_employee() {
         // given
-        Employee employee = new Employee(1, "Tom", 20, "male", 10000,1);
+        Employee employee = new Employee("1", "Tom", 20, "male", 10000,"1");
         employee.setId(null);
-        Employee createdEmployee = new Employee(1, "Tom", 20, "male", 10000,1);
+        Employee createdEmployee = new Employee("1", "Tom", 20, "male", 10000,"1");
 
 
         // when
@@ -247,7 +247,7 @@ public class EmployeeServiceTest {
     @Test
     public void should_return_nothing_when_delete_given_id() throws Exception {
         // given
-        Integer id = 1;
+        String id = "1";
 
         // when
         employeeService.deleteEmployee(id);
@@ -261,7 +261,7 @@ public class EmployeeServiceTest {
     @Test
     public void should_throw_exception_when_delete_given_employee_not_exist() throws Exception {
         // given
-        Integer id = 1;
+        String id = "1";
 
         // when
         doThrow(NoEmployeeFoundException.class).when(employeeRepository).deleteById(id);

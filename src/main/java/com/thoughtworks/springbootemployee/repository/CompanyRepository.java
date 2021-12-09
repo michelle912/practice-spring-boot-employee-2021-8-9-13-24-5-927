@@ -1,7 +1,6 @@
 package com.thoughtworks.springbootemployee.repository;
 
 import com.thoughtworks.springbootemployee.entity.Company;
-import com.thoughtworks.springbootemployee.entity.Employee;
 import com.thoughtworks.springbootemployee.exception.NoCompanyFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -19,12 +18,12 @@ public class CompanyRepository {
 
     public CompanyRepository() {
         this.companyList = new ArrayList<>();
-        Company company1 = new Company(1, "spring");
-        Company company2 = new Company(2, "spring");
-        Company company3 = new Company(3, "spring");
-        Company company4 = new Company(4, "spring");
-        Company company5 = new Company(5, "spring");
-        Company company6 = new Company(6, "spring");
+        Company company1 = new Company("1", "spring");
+        Company company2 = new Company("2", "spring");
+        Company company3 = new Company("3", "spring");
+        Company company4 = new Company("4", "spring");
+        Company company5 = new Company("5", "spring");
+        Company company6 = new Company("6", "spring");
         companyList.addAll(Arrays.asList(company1, company2, company3, company4, company5, company6));
     }
 
@@ -32,7 +31,7 @@ public class CompanyRepository {
         return companyList;
     }
 
-    public Company findById(Integer id) throws NoCompanyFoundException {
+    public Company findById(String id) throws NoCompanyFoundException {
         Company existingCompany = companyList.stream()
                 .filter(company -> company.getId().equals(id))
                 .findFirst()
@@ -59,10 +58,11 @@ public class CompanyRepository {
 
     public Company create(Company company) {
         Integer nextId = companyList.stream()
-                .mapToInt(Company::getId)
+                .map(Company::getId)
+                .mapToInt(Integer::parseInt)
                 .max()
                 .orElse(0)+1;
-        company.setId(nextId);
+        company.setId(String.valueOf(nextId));
         companyList.add(company);
 
         return company;
@@ -76,7 +76,7 @@ public class CompanyRepository {
         return company;
     }
 
-    public void deleteById(Integer id) throws NoCompanyFoundException {
+    public void deleteById(String id) throws NoCompanyFoundException {
         Company existingRecord = findById(id);
 
         companyList.remove(existingRecord);

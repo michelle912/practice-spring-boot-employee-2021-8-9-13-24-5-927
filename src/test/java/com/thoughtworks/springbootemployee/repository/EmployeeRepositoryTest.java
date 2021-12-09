@@ -23,8 +23,8 @@ public class EmployeeRepositoryTest {
     @Test
     public void should_return_employee_when_findById_given_id() throws Exception {
         // given
-        Integer id = 1;
-        Employee employee = new Employee(id, "Tom", 20, "male", 10000,1);
+        String id = "1";
+        Employee employee = new Employee(id, "Tom", 20, "male", 10000,"1");
         employeeRepository.create(employee);
 
         // when
@@ -37,8 +37,8 @@ public class EmployeeRepositoryTest {
     @Test
     public void should_return_all_employees_when_findAll_given_company_exist() throws Exception {
         // given
-        Integer id = 1;
-        Employee employee = new Employee(id, "Tom", 20, "male", 10000,1);
+        String id = "1";
+        Employee employee = new Employee(id, "Tom", 20, "male", 10000,"1");
         employeeRepository.create(employee);
 
         // when
@@ -55,7 +55,7 @@ public class EmployeeRepositoryTest {
     public void should_return_employees_with_gender_when_findByGender_given_gender() throws Exception {
         // given
         String gender = "male";
-        Employee employee = new Employee(1, "Tom", 20, gender, 10000,1);
+        Employee employee = new Employee("1", "Tom", 20, gender, 10000,"1");
         employeeRepository.create(employee);
 
         // when
@@ -73,10 +73,10 @@ public class EmployeeRepositoryTest {
         // given
         Integer page = 1;
         Integer pageSize = 2;
-        Employee employee1 = new Employee(1, "Tom1", 20, "male", 10000,1);
-        Employee employee2 = new Employee(2, "Tom2", 20, "male", 10000,1);
-        Employee employee3 = new Employee(3, "Tom3", 20, "male", 10000,1);
-        Employee employee4 = new Employee(4, "Tom4", 20, "male", 10000,1);
+        Employee employee1 = new Employee("1", "Tom1", 20, "male", 10000,"1");
+        Employee employee2 = new Employee("2", "Tom2", 20, "male", 10000,"1");
+        Employee employee3 = new Employee("3", "Tom3", 20, "male", 10000,"1");
+        Employee employee4 = new Employee("4", "Tom4", 20, "male", 10000,"1");
 
         employeeRepository.create(employee1);
         employeeRepository.create(employee2);
@@ -97,12 +97,12 @@ public class EmployeeRepositoryTest {
     @Test
     public void should_create_employees_when_creategiven_employee() throws Exception {
         // given
-        Employee employee1 = new Employee(1, "Tom1", 20, "male", 10000,1);
+        Employee employee1 = new Employee("1", "Tom1", 20, "male", 10000,"1");
         employee1.setId(null);
 
         // when
         employeeRepository.create(employee1);
-        Employee actual = employeeRepository.findById(1);
+        Employee actual = employeeRepository.findById("1");
 
         // then
         assertAll(
@@ -118,14 +118,14 @@ public class EmployeeRepositoryTest {
     @Test
     public void should_save_employees_when_save_given_employee() throws Exception {
         // given
-        Employee employee = new Employee(1, "Tom1", 20, "male", 10000,1);
+        Employee employee = new Employee("1", "Tom1", 20, "male", 10000,"1");
         employeeRepository.create(employee);
 
-        Employee updatedEmployee = new Employee(1, "Tom2", 20, "male", 10000,1);
+        Employee updatedEmployee = new Employee("1", "Tom2", 20, "male", 10000,"1");
 
         // when
         employeeRepository.save(updatedEmployee);
-        Employee actual = employeeRepository.findById(1);
+        Employee actual = employeeRepository.findById("1");
 
         // then
         assertAll(
@@ -141,13 +141,13 @@ public class EmployeeRepositoryTest {
     @Test
     public void should_delete_employee_when_deleteById_given_id() throws Exception {
         // given
-        Employee employee1 = new Employee(1, "Tom1", 20, "male", 10000, 1);
-        Employee employee2 = new Employee(2, "Tom1", 20, "male", 10000, 1);
+        Employee employee1 = new Employee("1", "Tom1", 20, "male", 10000, "1");
+        Employee employee2 = new Employee("2", "Tom1", 20, "male", 10000, "1");
         employeeRepository.create(employee1);
         employeeRepository.create(employee2);
 
         // when
-        employeeRepository.deleteById(1);
+        employeeRepository.deleteById("1");
 
         List<Employee> actual = employeeRepository.findAll();
 
@@ -158,8 +158,8 @@ public class EmployeeRepositoryTest {
     @Test
     public void should_clear_all_employee_when_clearAll_given_employees_exist() throws Exception {
         // given
-        Employee employee1 = new Employee(1, "Tom1", 20, "male", 10000, 1);
-        Employee employee2 = new Employee(2, "Tom1", 20, "male", 10000, 1);
+        Employee employee1 = new Employee("1", "Tom1", 20, "male", 10000, "1");
+        Employee employee2 = new Employee("2", "Tom1", 20, "male", 10000, "1");
         employeeRepository.create(employee1);
         employeeRepository.create(employee2);
 
@@ -175,13 +175,13 @@ public class EmployeeRepositoryTest {
     @Test
     public void should_get_employee_with_company_id_when_aggregateByCompanyId_given_company_id() throws Exception {
         // given
-        Employee employee1 = new Employee(1, "Tom1", 20, "male", 10000, 1);
-        Employee employee2 = new Employee(2, "Tom1", 20, "male", 10000, 2);
+        Employee employee1 = new Employee("1", "Tom1", 20, "male", 10000, "1");
+        Employee employee2 = new Employee("2", "Tom1", 20, "male", 10000, "2");
         employeeRepository.create(employee1);
         employeeRepository.create(employee2);
 
         // when
-        List<Employee> actual = employeeRepository.aggregateByCompanyId(1);
+        List<Employee> actual = employeeRepository.aggregateByCompanyId("1");
 
         // then
         assertAll(

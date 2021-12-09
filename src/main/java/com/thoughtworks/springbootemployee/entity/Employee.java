@@ -3,14 +3,14 @@ package com.thoughtworks.springbootemployee.entity;
 import java.util.Objects;
 
 public class Employee {
-    private Integer id;
+    private String id;
     private String name;
     private Integer age;
     private String gender;
     private Integer salary;
-    private Integer companyId;
+    private String companyId;
 
-    public Employee(Integer id, String name, Integer age, String gender, Integer salary, Integer companyId) {
+    public Employee(String id, String name, Integer age, String gender, Integer salary, String companyId) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -19,7 +19,7 @@ public class Employee {
         this.companyId = companyId;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
@@ -39,7 +39,7 @@ public class Employee {
         return salary;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -59,11 +59,11 @@ public class Employee {
         this.salary = salary;
     }
 
-    public Integer getCompanyId() {
+    public String getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(Integer companyId) {
+    public void setCompanyId(String companyId) {
         this.companyId = companyId;
     }
 

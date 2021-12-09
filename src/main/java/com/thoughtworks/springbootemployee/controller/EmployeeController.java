@@ -22,7 +22,7 @@ public class EmployeeController {
     }
 
     @GetMapping(value="/{id}")
-    public Employee getEmployeeById(@PathVariable Integer id) throws NoEmployeeFoundException {
+    public Employee getEmployeeById(@PathVariable String id) throws NoEmployeeFoundException {
         return employeeService.getEmployee(id);
     }
 
@@ -43,12 +43,12 @@ public class EmployeeController {
     }
 
     @PutMapping(value="/{id}")
-    public Employee updateEmployee(@PathVariable Integer id, @RequestBody Employee employee) throws NoEmployeeFoundException {
+    public Employee updateEmployee(@PathVariable String id, @RequestBody Employee employee) throws NoEmployeeFoundException {
         return employeeService.updateEmployee(id, employee);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> deleteEmployeeById(@PathVariable Integer id) throws NoEmployeeFoundException {
+    public ResponseEntity<String> deleteEmployeeById(@PathVariable String id) throws NoEmployeeFoundException {
         employeeService.deleteEmployee(id);
         return ResponseEntity.status(204).build();
     }

@@ -1,7 +1,7 @@
 package com.thoughtworks.springbootemployee.repository;
 
+import com.thoughtworks.springbootemployee.entity.Company;
 import com.thoughtworks.springbootemployee.entity.Employee;
-import com.thoughtworks.springbootemployee.exception.NoCompanyFoundException;
 import com.thoughtworks.springbootemployee.exception.NoEmployeeFoundException;
 import org.springframework.stereotype.Repository;
 
@@ -16,12 +16,12 @@ public class EmployeeRepository {
 
     public EmployeeRepository() {
         employeeList = new ArrayList<>();
-        employeeList.add(new Employee(1,"Lily1", 20, "Female", 8000,1));
-        employeeList.add(new Employee(2,"Lily2", 20, "Female", 8000,2));
-        employeeList.add(new Employee(3,"Lily3", 20, "Female", 8000,3));
-        employeeList.add(new Employee(4,"Lily4", 20, "Female", 8000,4));
-        employeeList.add(new Employee(5,"Lily5", 20, "Female", 8000,5));
-        employeeList.add(new Employee(6,"Tom", 20, "male", 8000,6));
+        employeeList.add(new Employee("1","Lily1", 20, "Female", 8000,"1"));
+        employeeList.add(new Employee("2","Lily2", 20, "Female", 8000,"2"));
+        employeeList.add(new Employee("3","Lily3", 20, "Female", 8000,"3"));
+        employeeList.add(new Employee("4","Lily4", 20, "Female", 8000,"4"));
+        employeeList.add(new Employee("5","Lily5", 20, "Female", 8000,"5"));
+        employeeList.add(new Employee("6","Tom", 20, "male", 8000,"6"));
 
     }
 
@@ -29,7 +29,7 @@ public class EmployeeRepository {
         return employeeList;
     }
 
-    public Employee findById(Integer id) throws NoEmployeeFoundException {
+    public Employee findById(String id) throws NoEmployeeFoundException {
         return employeeList.stream()
                 .filter(employee -> employee.getId().equals(id))
                 .findFirst()
@@ -46,10 +46,11 @@ public class EmployeeRepository {
 
     public Employee create(Employee employee) {
         Integer nextId = employeeList.stream()
-                .mapToInt(Employee::getId)
+                .map(Employee::getId)
+                .mapToInt(Integer::parseInt)
                 .max()
                 .orElse(0)+1;
-        employee.setId(nextId);
+        employee.setId(String.valueOf(nextId));
         employeeList.add(employee);
 
         return employee;
@@ -63,7 +64,7 @@ public class EmployeeRepository {
         return employee;
     }
 
-    public void deleteById(Integer id) throws NoEmployeeFoundException {
+    public void deleteById(String id) throws NoEmployeeFoundException {
         Employee existingRecord = findById(id);
 
         employeeList.remove(existingRecord);
@@ -73,7 +74,7 @@ public class EmployeeRepository {
         employeeList.clear();
     }
 
-    public List<Employee> aggregateByCompanyId(Integer id) {
+    public List<Employee> aggregateByCompanyId(String id) {
 
         return employeeList.stream()
                 .filter(employee -> employee.getCompanyId().equals(id))

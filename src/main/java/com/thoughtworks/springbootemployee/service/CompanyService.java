@@ -24,11 +24,11 @@ public class CompanyService {
         return companyRepository.findAll();
     }
 
-    public Company getCompany(Integer id) throws NoCompanyFoundException {
+    public Company getCompany(String id) throws NoCompanyFoundException {
         return companyRepository.findById(id);
     }
 
-    public List<Employee> getAllEmployeesUnderCompany(Integer id) throws NoCompanyFoundException {
+    public List<Employee> getAllEmployeesUnderCompany(String id) throws NoCompanyFoundException {
         companyRepository.findById(id);
         return employeeRepository.aggregateByCompanyId(id);
     }
@@ -41,7 +41,7 @@ public class CompanyService {
         return companyRepository.create(company);
     }
 
-    public Company updateCompany(Integer id, Company company) throws NoCompanyFoundException {
+    public Company updateCompany(String id, Company company) throws NoCompanyFoundException {
         Company existingRecord = companyRepository.findById(id);
 
         if (company == null) {
@@ -54,7 +54,7 @@ public class CompanyService {
         return companyRepository.save(existingRecord);
     }
 
-    public void deleteCompany(Integer id) throws NoCompanyFoundException {
+    public void deleteCompany(String id) throws NoCompanyFoundException {
         companyRepository.deleteById(id);
     }
 }
